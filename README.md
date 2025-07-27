@@ -55,9 +55,11 @@ A comprehensive digital platform for exploring the **ZOROASTER** universe - a fa
 ### User Experience & Authentication
 - **Role-Based Authentication**: Admin and user roles with different access levels
 - **Responsive Design**: Works seamlessly on desktop and mobile
-- **Glassmorphism UI**: Modern glass effects with neon accents
+- **Cosmic Background System**: Global high-resolution cosmic background with 6px blur glass overlay
+- **Glassmorphism UI**: Modern glass effects with neon accents and backdrop filters
 - **Elegant Typography**: Optimized Google Fonts (Playfair Display, Crimson Text, EB Garamond)
-- **Dark Theme**: Immersive sci-fi aesthetic with glowing elements
+- **Dark Theme**: Immersive sci-fi aesthetic with floating particle animations
+- **Performance Optimized**: Single global background eliminates redundant loading
 - **Real-time Sync**: Live updates between admin changes and public views
 
 ### Technical Excellence

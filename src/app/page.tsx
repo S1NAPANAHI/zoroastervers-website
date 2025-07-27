@@ -6,17 +6,11 @@ import { useAuth } from './contexts/AuthContext';
 export default function Home() {
   const { user, isAuthenticated } = useAuth();
 
-  // Test button to debug clicks
-  const handleTestClick = () => {
-    console.log('TEST BUTTON CLICKED!');
-    alert('Test button works!');
-  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Cosmic background with floating particles */}
+    <div className="min-h-screen">
+      {/* Floating particles for enhanced cosmic effect */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-[url('/cosmic-bg.jpg')] bg-cover bg-center bg-fixed opacity-20"></div>
         <div className="absolute inset-0">
           <div className="absolute w-96 h-96 rounded-full bg-purple-500/10 blur-3xl animate-pulse -top-20 -left-20"></div>
           <div className="absolute w-64 h-64 rounded-full bg-cyan-500/10 blur-3xl animate-pulse top-1/2 -right-10"></div>
@@ -27,16 +21,6 @@ export default function Home() {
       {/* Main Content */}
       <main className="relative z-10 pt-32 pointer-events-auto">
         <div className="container mx-auto px-4">
-          {/* DEBUG: Test Button */}
-          <div className="text-center mb-8">
-            <button 
-              onClick={handleTestClick}
-              className="neon-button-red px-6 py-3 rounded-lg font-semibold"
-              style={{ zIndex: 999999, position: 'relative' }}
-            >
-              🧪 TEST BUTTON - CLICK ME!
-            </button>
-          </div>
           
           {/* Hero Section */}
           <section className="text-center mb-16">

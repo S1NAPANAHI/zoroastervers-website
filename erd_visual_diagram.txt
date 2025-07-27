@@ -1,0 +1,165 @@
+ENTITY-RELATIONSHIP DIAGRAM (ERD) - VISUAL REPRESENTATION
+=========================================================
+
+Core User Entities:
+┌─────────┐    1:1    ┌─────────┐
+│  User   │ ◄────────► │ Profile │
+└─────────┘           └─────────┘
+     │ 1
+     │
+     │ M
+     ▼
+┌─────────┐
+│ Follow  │ (Junction Table)
+└─────────┘
+     │
+     │ Follower_ID / Following_ID
+     ▼
+   Users (M:M relationship)
+
+Content Entities:
+┌─────────┐    1:M    ┌─────────┐
+│  User   │ ◄────────► │  Book   │
+└─────────┘           └─────────┘
+                           │ 1
+                           │
+                           │ M
+                           ▼
+                      ┌─────────┐
+                      │ Chapter │
+                      └─────────┘
+
+┌─────────┐    1:M    ┌─────────┐
+│  User   │ ◄────────► │BlogPost │
+└─────────┘           └─────────┘
+
+Assets Relationships:
+┌─────────┐    1:M    ┌─────────┐
+│  Book   │ ◄────────► │  Asset  │
+└─────────┘           └─────────┘
+
+┌─────────┐    1:M    ┌─────────┐
+│ Chapter │ ◄────────► │  Asset  │
+└─────────┘           └─────────┘
+
+┌─────────┐    1:M    ┌─────────┐
+│BlogPost │ ◄────────► │  Asset  │
+└─────────┘           └─────────┘
+
+Tagging System (M:M):
+┌─────────┐           ┌─────────┐
+│  Book   │ ◄────────► │   Tag   │
+└─────────┘    M:M    └─────────┘
+
+┌─────────┐           ┌─────────┐
+│BlogPost │ ◄────────► │   Tag   │
+└─────────┘    M:M    └─────────┘
+
+Engagement Entities:
+┌─────────┐    1:M    ┌─────────┐
+│  User   │ ◄────────► │ Comment │
+└─────────┘           └─────────┘
+                           │ M
+                           │
+                           │ 1
+                           ▼
+                  ┌─────────┐
+                  │ Book/   │
+                  │Chapter/ │
+                  │BlogPost │
+                  └─────────┘
+
+┌─────────┐    1:M    ┌─────────┐
+│  User   │ ◄────────► │Reaction │
+└─────────┘           └─────────┘
+                           │ M
+                           │
+                           │ 1
+                           ▼
+                  ┌─────────┐
+                  │ Book/   │
+                  │Chapter/ │
+                  │BlogPost/│
+                  │ Comment │
+                  └─────────┘
+
+Progress Tracking:
+┌─────────┐    1:M    ┌─────────┐
+│  User   │ ◄────────► │Progress │
+└─────────┘           └─────────┘
+                           │ M
+                           │
+                           │ 1
+                           ▼
+                  ┌─────────┐
+                  │ Book/   │
+                  │ Chapter │
+                  └─────────┘
+
+System Activity:
+┌─────────┐    1:M    ┌─────────┐
+│  User   │ ◄────────► │Timeline │
+└─────────┘           │ Event   │
+                      └─────────┘
+                           │ M
+                           │
+                           │ 1
+                           ▼
+                  ┌─────────┐
+                  │Various  │
+                  │Content  │
+                  │Entities │
+                  └─────────┘
+
+┌─────────┐    1:M    ┌─────────┐
+│  User   │ ◄────────► │Notifica-│
+└─────────┘           │  tion   │
+                      └─────────┘
+                           │ M
+                           │
+                           │ 1
+                           ▼
+                  ┌─────────┐
+                  │Various  │
+                  │Content  │
+                  │Entities │
+                  └─────────┘
+
+Achievement System:
+┌─────────┐    1:M    ┌─────────┐
+│  User   │ ◄────────► │Achieve- │
+└─────────┘           │  ment   │
+                      └─────────┘
+
+LEGEND:
+========
+1:1 = One-to-One relationship
+1:M = One-to-Many relationship  
+M:M = Many-to-Many relationship
+◄────────► = Bidirectional relationship
+▼ = Dependency direction
+
+CARDINALITY NOTATION:
+====================
+│ 1 = One (exactly one)
+│ M = Many (zero or more)
+│ 0..1 = Zero or one (optional)
+│ 1..* = One or more (at least one)
+
+KEY RELATIONSHIPS SUMMARY:
+=========================
+• User ↔ Profile: 1:1 (Each user has one profile)
+• User ↔ Book: 1:M (Users can author multiple books)
+• User ↔ BlogPost: 1:M (Users can write multiple posts)
+• Book ↔ Chapter: 1:M (Books contain multiple chapters)
+• User ↔ User via Follow: M:M (Users can follow each other)
+• Content ↔ Tag: M:M (Content can have multiple tags)
+• Content ↔ Asset: 1:M (Content can have multiple assets)
+• User ↔ Comment/Reaction/Progress: 1:M (Users can have multiple of each)
+• Comment/Reaction ↔ Content: M:1 (Multiple per content item)
+
+POLYMORPHIC RELATIONSHIPS:
+=========================
+Some entities (Comment, Reaction, TimelineEvent, Notification) have 
+polymorphic relationships, meaning they can be associated with multiple 
+types of content entities (Book, Chapter, BlogPost, etc.)

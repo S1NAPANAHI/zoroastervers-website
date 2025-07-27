@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
@@ -15,6 +15,11 @@ interface TimeLeft {
 const Header: React.FC = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const { getCartItemCount, getCartTotal } = useCart();
+  
+  // UI State
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Countdown Timer Logic
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
@@ -25,6 +30,18 @@ const Header: React.FC = () => {
   });
   const [isExpired, setIsExpired] = useState(false);
 
+  // Handle clicks outside dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
   useEffect(() => {
     const nextIssueDate = new Date('2025-10-27T00:00:00');
     
@@ -103,7 +120,7 @@ const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Navigation Links */}
+{/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link 
               href="/" 
@@ -123,32 +140,66 @@ const Header: React.FC = () => {
             >
               Books
             </Link>
-            <Link 
-              href="/timeline" 
-              className="text-slate-300 hover:text-cyan-400 transition-colors font-medium"
-            >
-              Timeline
-            </Link>
-            <Link 
-              href="/behind-the-scenes" 
-              className="text-slate-300 hover:text-cyan-400 transition-colors font-medium"
-            >
-              Behind the Scenes
-            </Link>
-            <Link 
-              href="/shop"
-              className="text-slate-300 hover:text-cyan-400 transition-colors font-medium"
-            >
-              Shop
-            </Link>
-            {user?.isAdmin && (
-              <Link 
-                href="/admin" 
-                className="text-slate-300 hover:text-red-400 transition-colors font-medium"
-              >
-                Admin
-              </Link>
-            )}
+            <div className="relative inline-block text-left" ref={dropdownRef}>
+              <div>
+                <button 
+                  type="button" 
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="text-slate-300 hover:text-cyan-400 transition-colors font-medium inline-flex items-center space-x-1" 
+                  id="options-menu" 
+                  aria-expanded={showDropdown} 
+                  aria-haspopup="true"
+                >
+                  <span>More</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg glass border border-white/10 backdrop-blur-xl" role="menu" aria-orientation="vertical" aria-labelledby="options-menu" style={{
+                  background: 'rgba(15, 23, 42, 0.9)',
+                  boxShadow: '0 0 30px rgba(34, 211, 238, 0.15), 0 0 60px rgba(168, 85, 247, 0.1)'
+                }}>
+                  <div className="py-1" role="none">
+                    <Link 
+                      href="/timeline" 
+                      className="text-slate-300 hover:text-cyan-400 transition-colors font-medium block px-4 py-2 text-sm hover:bg-white/5" 
+                      role="menuitem"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      Timeline
+                    </Link>
+                    <Link 
+                      href="/behind-the-scenes" 
+                      className="text-slate-300 hover:text-cyan-400 transition-colors font-medium block px-4 py-2 text-sm hover:bg-white/5" 
+                      role="menuitem"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      Behind the Scenes
+                    </Link>
+                    <Link 
+                      href="/shop"
+                      className="text-slate-300 hover:text-cyan-400 transition-colors font-medium block px-4 py-2 text-sm hover:bg-white/5" 
+                      role="menuitem"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      Shop
+                    </Link>
+                    {user?.isAdmin && (
+                      <Link 
+                        href="/admin" 
+                        className="text-slate-300 hover:text-red-400 transition-colors font-medium block px-4 py-2 text-sm hover:bg-white/5" 
+                        role="menuitem"
+                        onClick={() => setShowDropdown(false)}
+                      >
+                        Admin
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Cart Indicator */}
@@ -212,12 +263,106 @@ const Header: React.FC = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button (placeholder) */}
-          <button className="md:hidden glass px-3 py-2 rounded-lg border border-white/10 text-slate-300">
+{/* Mobile Menu Button */}
+          <button 
+            onClick={() => setShowMobileMenu(!showMobileMenu)} 
+            className="md:hidden glass px-3 py-2 rounded-lg border border-white/10 text-slate-300 hover:text-cyan-400 transition-colors"
+          >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
+          
+          {/* Mobile Menu Sidebar */}
+          {showMobileMenu && (
+            <>
+              {/* Backdrop */}
+              <div 
+                className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                onClick={() => setShowMobileMenu(false)}
+              ></div>
+              
+              {/* Sidebar */}
+              <div className="fixed top-0 right-0 h-full w-80 glass border-l border-white/10 backdrop-blur-xl z-50" style={{
+                background: 'rgba(15, 23, 42, 0.95)',
+                boxShadow: '0 0 30px rgba(34, 211, 238, 0.15), 0 0 60px rgba(168, 85, 247, 0.1)'
+              }}>
+                <div className="p-6">
+                  {/* Close Button */}
+                  <div className="flex justify-end mb-8">
+                    <button 
+                      onClick={() => setShowMobileMenu(false)} 
+                      className="glass px-3 py-2 rounded-lg border border-white/10 text-slate-300 hover:text-cyan-400 transition-colors"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  {/* Navigation Links */}
+                  <nav className="space-y-4">
+                    <Link 
+                      href="/" 
+                      className="block text-slate-300 hover:text-cyan-400 transition-colors font-medium py-3 px-4 rounded-lg hover:bg-white/5"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      Home
+                    </Link>
+                    <Link 
+                      href="/overview" 
+                      className="block text-slate-300 hover:text-cyan-400 transition-colors font-medium py-3 px-4 rounded-lg hover:bg-white/5"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      Overview
+                    </Link>
+                    <Link 
+                      href="/books" 
+                      className="block text-slate-300 hover:text-cyan-400 transition-colors font-medium py-3 px-4 rounded-lg hover:bg-white/5"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      Books
+                    </Link>
+                    
+                    {/* Secondary Links Section */}
+                    <div className="border-t border-white/10 pt-4 mt-6">
+                      <h3 className="text-slate-400 text-sm font-medium mb-3 px-4">More</h3>
+                      <Link 
+                        href="/timeline" 
+                        className="block text-slate-300 hover:text-cyan-400 transition-colors font-medium py-3 px-4 rounded-lg hover:bg-white/5"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        Timeline
+                      </Link>
+                      <Link 
+                        href="/behind-the-scenes" 
+                        className="block text-slate-300 hover:text-cyan-400 transition-colors font-medium py-3 px-4 rounded-lg hover:bg-white/5"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        Behind the Scenes
+                      </Link>
+                      <Link 
+                        href="/shop" 
+                        className="block text-slate-300 hover:text-cyan-400 transition-colors font-medium py-3 px-4 rounded-lg hover:bg-white/5"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        Shop
+                      </Link>
+                      {user?.isAdmin && (
+                        <Link 
+                          href="/admin" 
+                          className="block text-slate-300 hover:text-red-400 transition-colors font-medium py-3 px-4 rounded-lg hover:bg-white/5"
+                          onClick={() => setShowMobileMenu(false)}
+                        >
+                          Admin
+                        </Link>
+                      )}
+                    </div>
+                  </nav>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 

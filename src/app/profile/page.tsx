@@ -25,7 +25,7 @@ const ProfilePage: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="glass-dark p-8 rounded-2xl border border-white/20 text-center">
           <h2 className="text-2xl font-bold text-white mb-4">Access Denied</h2>
           <p className="text-slate-300 mb-6">Please sign in to view your profile.</p>
@@ -104,10 +104,9 @@ const ProfilePage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Cosmic background */}
-      <div className="fixed inset-0 opacity-30">
-        <div className="absolute inset-0 bg-[url('/cosmic-bg.jpg')] bg-cover bg-center bg-fixed"></div>
+    <div className="min-h-screen">
+      {/* Floating particles for enhanced cosmic effect */}
+      <div className="fixed inset-0 opacity-30 pointer-events-none">
         <div className="absolute inset-0">
           <div className="absolute w-96 h-96 rounded-full bg-purple-500/20 blur-3xl animate-pulse -top-20 -left-20"></div>
           <div className="absolute w-64 h-64 rounded-full bg-cyan-500/20 blur-3xl animate-pulse top-1/2 -right-10"></div>
