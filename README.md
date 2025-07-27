@@ -2,9 +2,29 @@
 
 *by Sina Panahi*
 
-An immersive digital experience for exploring the **ZOROASTER** universe - a fantasy saga spanning 1,700 years across five interconnected books. This comprehensive Next.js application features an interactive timeline, advanced e-commerce shop with hierarchical product structure, user authentication, progress tracking, countdown timer for upcoming releases, and integrated purchasing system with cart management.
+A comprehensive digital platform for exploring the **ZOROASTER** universe - a fantasy saga with complete admin management system, hierarchical content structure, and advanced e-commerce capabilities. Built with Next.js 15, TypeScript, and Supabase, featuring a full-stack admin dashboard for content management and real-time synchronization.
 
 ## 🌟 Features
+
+### Complete Admin Management System
+- **Books Manager**: Create and manage top-level book series with metadata, pricing, and completion status
+- **Volumes Manager**: Organize volumes within books with ordering, pricing, and physical/digital options
+- **Sagas Manager**: Manage story sagas within volumes with word count tracking and descriptions
+- **Arcs Manager**: Control story arcs within sagas with detailed descriptions and word counts
+- **Issues Manager**: Handle individual issues with release dates, content URLs, and status management
+- **Timeline Manager**: Full CRUD operations for historical events with categories and descriptions
+- **Shop Manager**: Legacy hierarchical shop management with advanced filtering
+- **User Management**: Admin controls for user roles and permissions
+- **Real-time Updates**: Changes reflect immediately across the platform
+- **Authentication-Based Access**: Role-based admin access with secure authentication
+
+### Hierarchical Database Structure
+- **PostgreSQL Backend**: Complete Supabase integration with proper relational structure
+- **5-Level Hierarchy**: Books → Volumes → Sagas → Arcs → Issues
+- **Row Level Security**: Comprehensive RLS policies for data protection
+- **Cascade Operations**: Proper cascade delete operations maintaining data integrity
+- **Optimized Queries**: Indexed tables with relationship joins for performance
+- **Type Safety**: Full TypeScript interfaces matching database schema
 
 ### Interactive Universal Timeline
 - **1,700-year span**: Explore events from 500 CE to 2200 CE
@@ -12,46 +32,42 @@ An immersive digital experience for exploring the **ZOROASTER** universe - a fan
 - **Smart navigation**: Book ribbons and smooth scrolling between eras
 - **Dynamic backgrounds**: Progressive gradients that change as you scroll through different time periods
 - **Date ruler**: Visual timeline indicator showing your current position in history
-- **Progress tracking**: Real-time scroll progress with user analytics
+- **Admin Management**: Full CRUD operations for timeline events from admin dashboard
 
 ### Advanced E-Commerce Shop
-- **Hierarchical Product Structure**: 5 Books → 4 Volumes per Book → Sagas → Arcs → Issues
+- **Live Database Integration**: Real-time shop data from Supabase backend
+- **Hierarchical Product Structure**: Dynamic structure based on database content
 - **Multi-Level Purchasing**: Buy individual issues, volumes, or complete books with bundle discounts
-- **Dynamic Filtering**: Filter by product level (all, books, volumes, sagas, arcs, issues)
-- **Flexible Sorting**: Sort by release date, price, title, or popularity
-- **Dual View Modes**: Tree view for hierarchical browsing, grid view for quick selection
+- **Dynamic Filtering**: Filter by product level with live data updates
+- **Admin-Controlled Pricing**: Pricing management through admin dashboard
 - **Smart Cart System**: Add individual items or bundles with automatic discount calculation
 - **Cart Drawer**: Slide-out cart accessible from header with item management
-- **Progressive Purchase Modal**: Multi-tier recommendations with bundle suggestions
-- **Bundle Pricing**: Automatic discounts for volume and book purchases
+- **Status Management**: Draft, published, and archived content states
 
-### Release Management & Countdown
-- **Integrated Countdown Timer**: Live countdown in navigation header showing time until next issue
-- **Smart Timer Display**: Compact format (91d:18h:44m) integrated next to ZOROASTER title  
-- **Release Notifications**: Automatic switch to "New Issue Available!" when countdown expires
-- **Quarterly Schedule**: Configured for 3-month release cycles
-- **Cross-Platform Visibility**: Timer appears on all pages for constant awareness
+### Release Management & Content Control
+- **Admin-Controlled Releases**: Manage publication status from admin dashboard
+- **Integrated Countdown Timer**: Live countdown in navigation header
+- **Status Transitions**: Draft → Published → Archived workflow
+- **Release Date Management**: Set and manage release dates for issues
+- **Content URL Management**: Link to actual content through admin interface
+- **Bulk Operations**: Manage multiple items efficiently
 
-### Book Integration & Commerce
-- **5 interconnected books**: The Awakening, Shattered Realms, Convergence, The Crystal War, Infinite Paths
-- **Direct purchase links**: Buy buttons integrated into timeline events
-- **Chapter references**: Specific chapter citations for each historical event
-- **Relevance descriptions**: Contextual explanations of why each book matters to specific events
-- **Dynamic pricing**: $2.99 - $18.99 with bundle discounts and volume pricing
-
-### User Experience
-- **Authentication system**: Login/signup with progress tracking
-- **Responsive design**: Works seamlessly on desktop and mobile
+### User Experience & Authentication
+- **Role-Based Authentication**: Admin and user roles with different access levels
+- **Responsive Design**: Works seamlessly on desktop and mobile
 - **Glassmorphism UI**: Modern glass effects with neon accents
-- **Elegant typography**: Optimized Google Fonts (Playfair Display, Crimson Text, EB Garamond)
-- **Dark theme**: Immersive sci-fi aesthetic with glowing elements
+- **Elegant Typography**: Optimized Google Fonts (Playfair Display, Crimson Text, EB Garamond)
+- **Dark Theme**: Immersive sci-fi aesthetic with glowing elements
+- **Real-time Sync**: Live updates between admin changes and public views
 
 ### Technical Excellence
-- **Next.js 14**: App Router with TypeScript
-- **Optimized fonts**: Next.js font optimization for Google Fonts
-- **Smooth animations**: 60fps scroll-based animations and transitions
-- **Performance**: Efficient rendering with React hooks and optimized re-renders
-- **SEO ready**: Proper meta tags and semantic HTML structure
+- **Next.js 15**: Latest App Router with TypeScript
+- **Supabase Backend**: PostgreSQL database with real-time subscriptions
+- **Full-Stack Architecture**: Complete frontend and backend integration
+- **Type Safety**: Comprehensive TypeScript implementation
+- **Performance Optimized**: Efficient queries and optimized rendering
+- **Deployment Ready**: Configured for Vercel with environment management
+- **Security**: Row Level Security, authentication, and input validation
 
 ## 🚀 Getting Started
 
@@ -107,19 +123,53 @@ npm start
 src/
 ├── app/
 │   ├── components/
-│   │   ├── Header.tsx              # Navigation with countdown timer
+│   │   ├── Header.tsx              # Navigation with countdown timer and cart
 │   │   ├── EnhancedTimeline.tsx     # Main timeline component
 │   │   ├── InteractiveTimelineEvent.tsx  # Expandable event cards
 │   │   ├── AuthForm.tsx            # Login/signup forms
+│   │   ├── admin/                  # Admin management components
+│   │   │   ├── AdminSidebar.tsx    # Admin navigation sidebar
+│   │   │   ├── AdminOverview.tsx   # Admin dashboard overview
+│   │   │   ├── BookManager.tsx     # Books CRUD management
+│   │   │   ├── BookModal.tsx       # Add/edit books modal
+│   │   │   ├── VolumeManager.tsx   # Volumes CRUD management
+│   │   │   ├── VolumeModal.tsx     # Add/edit volumes modal
+│   │   │   ├── SagaManager.tsx     # Sagas CRUD management
+│   │   │   ├── SagaModal.tsx       # Add/edit sagas modal
+│   │   │   ├── ArcManager.tsx      # Arcs CRUD management
+│   │   │   ├── ArcModal.tsx        # Add/edit arcs modal
+│   │   │   ├── IssueManager.tsx    # Issues CRUD management
+│   │   │   └── IssueModal.tsx      # Add/edit issues modal
 │   │   └── shop/                   # Shop component directory
 │   │       ├── BundleRecommendations.tsx    # Bundle suggestions
 │   │       ├── CartDrawer.tsx               # Slide-out cart component
 │   │       ├── GridView.tsx                 # Grid display for products
 │   │       ├── HierarchicalShopTree.tsx     # Tree view for hierarchical browsing
 │   │       └── ProgressivePurchaseModal.tsx # Multi-tier purchase modal
+│   ├── api/
+│   │   └── admin/                  # Admin API routes
+│   │       ├── books/              # Books API endpoints
+│   │       │   ├── route.ts        # GET, POST books
+│   │       │   └── [id]/route.ts   # GET, PUT, DELETE specific book
+│   │       ├── volumes/            # Volumes API endpoints
+│   │       │   ├── route.ts        # GET, POST volumes
+│   │       │   └── [id]/route.ts   # GET, PUT, DELETE specific volume
+│   │       ├── sagas/              # Sagas API endpoints
+│   │       │   ├── route.ts        # GET, POST sagas
+│   │       │   └── [id]/route.ts   # GET, PUT, DELETE specific saga
+│   │       ├── arcs/               # Arcs API endpoints
+│   │       │   ├── route.ts        # GET, POST arcs
+│   │       │   └── [id]/route.ts   # GET, PUT, DELETE specific arc
+│   │       ├── issues/             # Issues API endpoints
+│   │       │   ├── route.ts        # GET, POST issues
+│   │       │   └── [id]/route.ts   # GET, PUT, DELETE specific issue
+│   │       ├── shop/               # Legacy shop API endpoints
+│   │       └── timeline/           # Timeline events API endpoints
 │   ├── contexts/
 │   │   ├── AuthContext.tsx         # User authentication state
 │   │   └── CartContext.tsx         # Shopping cart management
+│   ├── admin/
+│   │   └── page.tsx               # Admin dashboard main page
 │   ├── books/
 │   │   └── page.tsx               # Books overview page
 │   ├── login/
@@ -137,6 +187,16 @@ src/
 │   ├── globals.css                # Global styles and font imports
 │   ├── layout.tsx                 # Root layout with font optimization
 │   └── page.tsx                   # Homepage with cosmic background
+├── lib/
+│   └── supabase.ts                # Supabase client configuration and types
+├── database/
+│   ├── schema.sql                 # Original database schema
+│   └── hierarchical-schema.sql    # New hierarchical database schema
+├── documentation/
+│   ├── README.md                  # Main documentation
+│   ├── file-structure-guide.md    # File structure explanation
+│   ├── react-fundamentals.md      # React concepts guide
+│   └── authentication-guide.md    # Authentication system guide
 ├── data/
 │   └── shopData.ts                # Hierarchical shop product data
 ├── types/
