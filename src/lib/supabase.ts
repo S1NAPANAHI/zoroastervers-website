@@ -14,6 +14,9 @@ export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   }
 })
 
+// Export adminClient as alias for compatibility
+export const adminClient = supabaseAdmin
+
 // Types for our database tables
 export interface ShopItem {
   id: string
