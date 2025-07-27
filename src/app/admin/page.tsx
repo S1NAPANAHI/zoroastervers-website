@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import AdminSidebar from '../components/admin/AdminSidebar'
+import VolumeManager from '../components/admin/VolumeManager'
 import IssueManager from '../components/admin/IssueManager'
 import AdminOverview from '../components/admin/AdminOverview'
 
@@ -65,7 +66,7 @@ const AdminDashboard: React.FC = () => {
           
           {activeTab === 'overview' && <AdminOverview stats={stats} />}
           {activeTab === 'books' && <div className="text-white">Books Manager - Coming Soon</div>}
-          {activeTab === 'volumes' && <div className="text-white">Volumes Manager - Coming Soon</div>}
+{activeTab === 'volumes' && <VolumeManager />}
           {activeTab === 'sagas' && <div className="text-white">Sagas Manager - Coming Soon</div>}
           {activeTab === 'arcs' && <div className="text-white">Arcs Manager - Coming Soon</div>}
           {activeTab === 'issues' && <IssueManager />}
