@@ -1,6 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabase';
+import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
 
 interface User {
   id: string;
@@ -202,147 +204,32 @@ const mockUsers: User[] = [
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
 
-  useEffect(() => {
-    // Check for stored user session on mount
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // Mock authentication - in real app, this would call your backend
-    const foundUser = mockUsers.find(u => u.email === email);
-    if (foundUser && password === 'password123') { // Mock password check
-      setUser(foundUser);
-      setIsAuthenticated(true);
-      localStorage.setItem('user', JSON.stringify(foundUser));
-      return true;
-    }
-    return false;
-  };
-
-  const loginWithGoogle = async (): Promise<boolean> => {
-    // Mock Google login - in real app, this would use Google OAuth
-    try {
-      // Simulate Google login with mock user data
-      const googleUser: User = {
-        id: 'google_' + Date.now().toString(),
-        username: 'GoogleUser' + Math.floor(Math.random() * 1000),
-        email: 'user@gmail.com',
-        avatar: '🔵',
-        bio: 'Signed in with Google',
-        joinDate: new Date().toISOString().split('T')[0],
-        role: 'user',
-        isAdmin: false,
-        badges: ['Google User'],
-        achievements: [{
-          id: 'social-login',
-          name: 'Social Butterfly',
-          description: 'Used social login to join the universe',
-          icon: '🦋',
-          unlockedAt: new Date().toISOString().split('T')[0],
-          category: 'community'
-        }],
-        favorites: {
-          characters: [],
-          locations: [],
-          timelineEvents: [],
-          books: []
-        },
-        progress: {
-          booksRead: 0,
-          totalBooks: 5,
-          timelineExplored: 0,
-          charactersDiscovered: 0,
-          locationsExplored: 0
-        },
-        preferences: {
-          theme: 'dark',
-          spoilerLevel: 'none',
-          notifications: true
-        },
-        customPaths: [],
-        notes: []
-      };
-
-      setUser(googleUser);
-      setIsAuthenticated(true);
-      localStorage.setItem('user', JSON.stringify(googleUser));
-      return true;
-    } catch (error) {
-      console.error('Google login failed:', error);
-      return false;
-    }
-  };
-
-  const loginWithFacebook = async (): Promise<boolean> => {
-    // Mock Facebook login - in real app, this would use Facebook OAuth
-    try {
-      // Simulate Facebook login with mock user data
-      const facebookUser: User = {
-        id: 'facebook_' + Date.now().toString(),
-        username: 'FBUser' + Math.floor(Math.random() * 1000),
-        email: 'user@facebook.com',
-        avatar: '🔷',
-        bio: 'Signed in with Facebook',
-        joinDate: new Date().toISOString().split('T')[0],
-        role: 'user',
-        isAdmin: false,
-        badges: ['Facebook User'],
-        achievements: [{
-          id: 'social-login',
-          name: 'Social Butterfly',
-          description: 'Used social login to join the universe',
-          icon: '🦋',
-          unlockedAt: new Date().toISOString().split('T')[0],
-          category: 'community'
-        }],
-        favorites: {
-          characters: [],
-          locations: [],
-          timelineEvents: [],
-          books: []
-        },
-        progress: {
-          booksRead: 0,
-          totalBooks: 5,
-          timelineExplored: 0,
-          charactersDiscovered: 0,
-          locationsExplored: 0
-        },
-        preferences: {
-          theme: 'dark',
-          spoilerLevel: 'none',
-          notifications: true
-        },
-        customPaths: [],
-        notes: []
-      };
-
-      setUser(facebookUser);
-      setIsAuthenticated(true);
-      localStorage.setItem('user', JSON.stringify(facebookUser));
-      return true;
-    } catch (error) {
-      console.error('Facebook login failed:', error);
-      return false;
-    }
-  };
-
-  const signup = async (username: string, email: string, password: string): Promise<boolean> => {
-    // Mock signup - in real app, this would call your backend
-    const newUser: User = {
-      id: Date.now().toString(),
+  // Helper function to create our User object from Supabase user
+  const createUserFromSupabase = (supabaseUser: SupabaseUser): User => {
+    const username = supabaseUser.user_metadata?.full_name || 
+                    supabaseUser.user_metadata?.name || 
+                    supabaseUser.email?.split('@')[0] || 'User';
+    
+    return {
+      id: supabaseUser.id,
       username,
-      email,
-      joinDate: new Date().toISOString().split('T')[0],
+      email: supabaseUser.email || '',
+      avatar: supabaseUser.user_metadata?.avatar_url || '👤',
+      bio: supabaseUser.user_metadata?.bio || '',
+      joinDate: new Date(supabaseUser.created_at).toISOString().split('T')[0],
       role: 'user',
-      isAdmin: false,
+      isAdmin: false, // You can implement admin logic later
       badges: [],
-      achievements: [],
+      achievements: [{
+        id: 'welcome',
+        name: 'Welcome to ZOROASTER',
+        description: 'Successfully joined the universe',
+        icon: '🌟',
+        unlockedAt: new Date().toISOString().split('T')[0],
+        category: 'community'
+      }],
       favorites: {
         characters: [],
         locations: [],
@@ -364,17 +251,176 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       customPaths: [],
       notes: []
     };
-
-    setUser(newUser);
-    setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(newUser));
-    return true;
   };
 
-  const logout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
-    localStorage.removeItem('user');
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session?.user) {
+        const userData = createUserFromSupabase(session.user);
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem('user', JSON.stringify(userData));
+      }
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session?.user) {
+        const userData = createUserFromSupabase(session.user);
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem('user', JSON.stringify(userData));
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+        localStorage.removeItem('user');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const login = async (email: string, password: string): Promise<boolean> => {
+    try {
+      // First check for demo user
+      if (email === 'loremaster@example.com' && password === 'password123') {
+        const demoUser = mockUsers.find(u => u.email === email);
+        if (demoUser) {
+          setUser(demoUser);
+          setIsAuthenticated(true);
+          localStorage.setItem('user', JSON.stringify(demoUser));
+          return true;
+        }
+      }
+
+      // Use Supabase Auth for other users
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        console.error('Login error:', error.message);
+        return false;
+      }
+
+      if (data.user) {
+        const userData = createUserFromSupabase(data.user);
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem('user', JSON.stringify(userData));
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Login failed:', error);
+      return false;
+    }
+  };
+
+  const loginWithGoogle = async (): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/profile`
+        }
+      });
+
+      if (error) {
+        console.error('Google login error:', error.message);
+        return false;
+      }
+
+      // The user will be redirected to Google for authentication
+      // The auth state change will be handled by our useEffect
+      return true;
+    } catch (error) {
+      console.error('Google login failed:', error);
+      return false;
+    }
+  };
+
+  const loginWithFacebook = async (): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'facebook',
+        options: {
+          redirectTo: `${window.location.origin}/profile`
+        }
+      });
+
+      if (error) {
+        console.error('Facebook login error:', error.message);
+        return false;
+      }
+
+      // The user will be redirected to Facebook for authentication
+      // The auth state change will be handled by our useEffect
+      return true;
+    } catch (error) {
+      console.error('Facebook login failed:', error);
+      return false;
+    }
+  };
+
+  const signup = async (username: string, email: string, password: string): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: username,
+            username: username
+          }
+        }
+      });
+
+      if (error) {
+        console.error('Signup error:', error.message);
+        return false;
+      }
+
+      // User will receive confirmation email
+      // For now, we'll create a temporary user object
+      if (data.user) {
+        const userData = createUserFromSupabase(data.user);
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem('user', JSON.stringify(userData));
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Signup failed:', error);
+      return false;
+    }
+  };
+
+  const logout = async () => {
+    try {
+      // Sign out from Supabase
+      await supabase.auth.signOut();
+      
+      // Clear local state (this will also be handled by auth state change)
+      setUser(null);
+      setIsAuthenticated(false);
+      localStorage.removeItem('user');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Still clear local state even if Supabase logout fails
+      setUser(null);
+      setIsAuthenticated(false);
+      localStorage.removeItem('user');
+    }
   };
 
   const updateProfile = (updates: Partial<User>) => {
