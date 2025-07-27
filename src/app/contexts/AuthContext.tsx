@@ -374,8 +374,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      // First check for demo user
-      if (email === 'loremaster@example.com' && password === 'password123') {
+      // First check for demo users
+      if ((email === 'loremaster@example.com' || email === 'admin@zoroaster.com') && password === 'password123') {
         const demoUser = mockUsers.find(u => u.email === email);
         if (demoUser) {
           setUser(demoUser);
