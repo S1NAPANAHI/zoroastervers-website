@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 
 /* Obsidian-Inspired Theme Variables */
 :root {
@@ -67,19 +68,6 @@ body::before {
   z-index: -1;
 }
 
-/* Typography Classes */
-.font-serif {
-  font-family: var(--font-playfair-display), var(--font-crimson-text), var(--font-eb-garamond), serif;
-}
-
-.font-serif-body {
-  font-family: var(--font-crimson-text), var(--font-eb-garamond), serif;
-}
-
-.font-serif-elegant {
-  font-family: var(--font-eb-garamond), var(--font-crimson-text), serif;
-}
-
 /* Glassmorphism Effect */
 .glass {
   background: rgba(255, 255, 255, 0.1);
@@ -127,15 +115,6 @@ body::before {
 .neon-button-blue {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .neon-button-blue:hover {
@@ -143,21 +122,11 @@ body::before {
     0 0 20px rgba(59, 130, 246, 0.8),
     0 0 40px rgba(59, 130, 246, 0.6),
     0 0 60px rgba(59, 130, 246, 0.4);
-  transform: scale(1.05) translateY(-2px);
 }
 
 .neon-button-green {
   background: linear-gradient(135deg, #10b981, #047857);
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .neon-button-green:hover {
@@ -165,21 +134,11 @@ body::before {
     0 0 20px rgba(16, 185, 129, 0.8),
     0 0 40px rgba(16, 185, 129, 0.6),
     0 0 60px rgba(16, 185, 129, 0.4);
-  transform: scale(1.05) translateY(-2px);
 }
 
 .neon-button-purple {
   background: linear-gradient(135deg, #8b5cf6, #6d28d9);
   box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .neon-button-purple:hover {
@@ -187,7 +146,6 @@ body::before {
     0 0 20px rgba(139, 92, 246, 0.8),
     0 0 40px rgba(139, 92, 246, 0.6),
     0 0 60px rgba(139, 92, 246, 0.4);
-  transform: scale(1.05) translateY(-2px);
 }
 
 .neon-button-cyan {
@@ -256,6 +214,19 @@ body::before {
   transform: scale(1.05) translateY(-2px);
 }
 
+/* Typography Classes */
+.font-serif {
+  font-family: 'Playfair Display', 'Crimson Text', 'EB Garamond', serif;
+}
+
+.font-serif-body {
+  font-family: 'Crimson Text', 'EB Garamond', serif;
+}
+
+.font-serif-elegant {
+  font-family: 'EB Garamond', 'Crimson Text', serif;
+}
+
 /* Glowing Cards */
 .glow-card {
   transition: all 0.3s ease;
@@ -276,7 +247,7 @@ body::before {
 
 .book-stack {
   position: relative;
-  height: 600px;
+  height: 600px; /* Further increased height for better spacing */
   width: 200px;
   margin: 0 auto;
   transform-style: preserve-3d;
