@@ -130,7 +130,13 @@ const Header: React.FC = () => {
               Timeline
             </Link>
             <Link 
-              href="/shop" 
+              href="/behind-the-scenes" 
+              className="text-slate-300 hover:text-cyan-400 transition-colors font-medium"
+            >
+              Behind the Scenes
+            </Link>
+            <Link 
+              href="/shop"
               className="text-slate-300 hover:text-cyan-400 transition-colors font-medium"
             >
               Shop

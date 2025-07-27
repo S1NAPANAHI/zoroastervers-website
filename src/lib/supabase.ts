@@ -1,3 +1,19 @@
+
+// Posts for creator blog
+export interface Post {
+  id: string
+  title: string
+  slug: string
+  content: string
+  excerpt?: string
+  category: 'worldbuilding' | 'characters' | 'plot' | 'writing-process' | 'general'
+  status: 'draft' | 'published'
+  tags?: string[]
+  featured_image?: string
+  created_at: string
+  updated_at: string
+}
+
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
