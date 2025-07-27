@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { FaGoogle, FaFacebook } from 'react-icons/fa';
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -82,10 +83,11 @@ const LoginPage: React.FC = () => {
       if (success) {
         router.push('/profile');
       } else {
-        setErrors({ general: 'Google login failed. Please try again.' });
+        setErrors({ general: 'Google login failed. Please try again or ensure Google OAuth is enabled in your Supabase project.' });
       }
-    } catch (error) {
-      setErrors({ general: 'Google login failed. Please try again.' });
+    } catch (error: any) {
+      console.error('Google login error:', error);
+      setErrors({ general: error?.message || 'Google login failed. Please try again or ensure Google OAuth is enabled in your Supabase project.' });
     } finally {
       setIsLoading(false);
     }
@@ -98,10 +100,11 @@ const LoginPage: React.FC = () => {
       if (success) {
         router.push('/profile');
       } else {
-        setErrors({ general: 'Facebook login failed. Please try again.' });
+        setErrors({ general: 'Facebook login failed. Please try again or ensure Facebook OAuth is enabled in your Supabase project.' });
       }
-    } catch (error) {
-      setErrors({ general: 'Facebook login failed. Please try again.' });
+    } catch (error: any) {
+      console.error('Facebook login error:', error);
+      setErrors({ general: error?.message || 'Facebook login failed. Please try again or ensure Facebook OAuth is enabled in your Supabase project.' });
     } finally {
       setIsLoading(false);
     }
@@ -218,9 +221,9 @@ const LoginPage: React.FC = () => {
             <button
               onClick={handleGoogleLogin}
               disabled={isLoading}
-              className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-3 font-medium backdrop-blur-sm"
+              className="w-full bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 text-white py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-3 font-medium backdrop-blur-sm"
             >
-              <span className="text-xl">🔵</span>
+              <FaGoogle className="text-xl text-red-400" />
               <span>Continue with Google</span>
             </button>
 
@@ -229,7 +232,7 @@ const LoginPage: React.FC = () => {
               disabled={isLoading}
               className="w-full bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-white py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-3 font-medium backdrop-blur-sm"
             >
-              <span className="text-xl">🔷</span>
+              <FaFacebook className="text-xl text-blue-400" />
               <span>Continue with Facebook</span>
             </button>
           </div>

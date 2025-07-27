@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { FaGoogle, FaFacebook } from 'react-icons/fa';
 
 const SignUpPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const SignUpPage: React.FC = () => {
   });
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [isLoading, setIsLoading] = useState(false);
-  const { signup } = useAuth();
+  const { signup, loginWithGoogle, loginWithFacebook } = useAuth();
   const router = useRouter();
 
   const validateForm = () => {
@@ -72,6 +73,40 @@ const SignUpPage: React.FC = () => {
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    setIsLoading(true);
+    try {
+      const success = await loginWithGoogle();
+      if (success) {
+        router.push('/profile');
+      } else {
+        setErrors({ general: 'Google signup failed. Please try again or ensure Google OAuth is enabled in your Supabase project.' });
+      }
+    } catch (error: any) {
+      console.error('Google signup error:', error);
+      setErrors({ general: error?.message || 'Google signup failed. Please try again or ensure Google OAuth is enabled in your Supabase project.' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFacebookSignup = async () => {
+    setIsLoading(true);
+    try {
+      const success = await loginWithFacebook();
+      if (success) {
+        router.push('/profile');
+      } else {
+        setErrors({ general: 'Facebook signup failed. Please try again or ensure Facebook OAuth is enabled in your Supabase project.' });
+      }
+    } catch (error: any) {
+      console.error('Facebook signup error:', error);
+      setErrors({ general: error?.message || 'Facebook signup failed. Please try again or ensure Facebook OAuth is enabled in your Supabase project.' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -212,6 +247,37 @@ const SignUpPage: React.FC = () => {
               )}
             </button>
           </form>
+
+          {/* Social Login Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/20"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-3 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 text-slate-400">Or continue with</span>
+            </div>
+          </div>
+
+          {/* Social Login Buttons */}
+          <div className="space-y-3">
+            <button
+              onClick={handleGoogleSignup}
+              disabled={isLoading}
+              className="w-full bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 text-white py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-3 font-medium backdrop-blur-sm"
+            >
+              <FaGoogle className="text-xl text-red-400" />
+              <span>Continue with Google</span>
+            </button>
+
+            <button
+              onClick={handleFacebookSignup}
+              disabled={isLoading}
+              className="w-full bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-white py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-3 font-medium backdrop-blur-sm"
+            >
+              <FaFacebook className="text-xl text-blue-400" />
+              <span>Continue with Facebook</span>
+            </button>
+          </div>
 
           {/* Sign In Link */}
           <div className="mt-6 text-center">
