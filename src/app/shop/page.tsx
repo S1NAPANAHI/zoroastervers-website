@@ -10,7 +10,7 @@ import BundleRecommendations from '../components/shop/BundleRecommendations';
 import ProgressivePurchaseModal from '../components/shop/ProgressivePurchaseModal';
 import { TreeNode, CartItem, ViewMode, FilterLevel, SortBy, BundleRecommendation, PurchaseOption } from '@/types/shop';
 import { BundlePricingCalculator } from '@/utils/bundlePricing';
-import { shopData, getFilteredData, getAllItemsByType } from '@/data/shopData';
+import { ShopItem } from '@/lib/supabase';
 
 const ShopPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('tree');
@@ -20,16 +20,126 @@ const ShopPage: React.FC = () => {
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [showCartDrawer, setShowCartDrawer] = useState(false);
   const [bundleRecommendations, setBundleRecommendations] = useState<BundleRecommendation[]>([]);
-  const [displayData, setDisplayData] = useState<TreeNode[]>(shopData);
+  const [displayData, setDisplayData] = useState<TreeNode[]>([]);
+  const [shopItems, setShopItems] = useState<ShopItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   const { user } = useAuth();
   const { addToCart, getCartItemCount, getCartTotal } = useCart();
 
+  // Convert Supabase data to TreeNode structure
+  const convertToTreeNodes = (items: ShopItem[]): TreeNode[] => {
+    const itemMap = new Map<string, TreeNode>();
+    const rootNodes: TreeNode[] = [];
+
+    // First pass: create all nodes
+    items.forEach(item => {
+      const node: TreeNode = {
+        id: item.id,
+        title: item.title,
+        type: item.type as any,
+        price: parseFloat(item.price.toString()),
+        description: item.description || '',
+        coverImage: item.cover_image || '/placeholder-cover.jpg',
+        content: item.content || '',
+        status: item.status as any,
+        children: [],
+        orderIndex: item.order_index,
+        createdAt: item.created_at,
+        updatedAt: item.updated_at
+      };
+      itemMap.set(item.id, node);
+    });
+
+    // Second pass: build tree structure
+    items.forEach(item => {
+      const node = itemMap.get(item.id)!;
+      if (item.parent_id && itemMap.has(item.parent_id)) {
+        const parent = itemMap.get(item.parent_id)!;
+        parent.children = parent.children || [];
+        parent.children.push(node);
+      } else {
+        rootNodes.push(node);
+      }
+    });
+
+    // Sort children by order_index
+    const sortChildren = (nodes: TreeNode[]) => {
+      nodes.sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0));
+      nodes.forEach(node => {
+        if (node.children && node.children.length > 0) {
+          sortChildren(node.children);
+        }
+      });
+    };
+
+    sortChildren(rootNodes);
+    return rootNodes;
+  };
+
+  // Load shop data from API
+  useEffect(() => {
+    const fetchShopData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch('/api/shop');
+        if (!response.ok) {
+          throw new Error('Failed to fetch shop data');
+        }
+        const data: ShopItem[] = await response.json();
+        setShopItems(data);
+        const treeData = convertToTreeNodes(data);
+        setDisplayData(treeData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load shop data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchShopData();
+  }, []);
+
   // Update display data when filters/sorting change
   useEffect(() => {
-    const filteredData = getFilteredData(filterLevel, sortBy);
-    setDisplayData(filteredData);
-  }, [filterLevel, sortBy]);
+    if (shopItems.length === 0) return;
+    
+    let filteredItems = [...shopItems];
+    
+    // Apply filters
+    if (filterLevel !== 'all') {
+      const typeMap: Record<FilterLevel, string[]> = {
+        'all': [],
+        'books': ['book'],
+        'volumes': ['volume'],
+        'sagas': ['saga'],
+        'arcs': ['arc'],
+        'issues': ['issue']
+      };
+      if (typeMap[filterLevel]) {
+        filteredItems = filteredItems.filter(item => typeMap[filterLevel].includes(item.type));
+      }
+    }
+    
+    // Apply sorting
+    filteredItems.sort((a, b) => {
+      switch (sortBy) {
+        case 'price':
+          return parseFloat(a.price.toString()) - parseFloat(b.price.toString());
+        case 'title':
+          return a.title.localeCompare(b.title);
+        case 'release':
+        case 'popularity':
+        default:
+          return a.order_index - b.order_index;
+      }
+    });
+    
+    const treeData = convertToTreeNodes(filteredItems);
+    setDisplayData(treeData);
+  }, [shopItems, filterLevel, sortBy]);
 
   const handleAddToCart = (item: CartItem) => {
     addToCart(item);
@@ -51,7 +161,7 @@ const ShopPage: React.FC = () => {
       return null;
     };
 
-    const item = findItem(shopData);
+    const item = findItem(displayData);
     if (item) {
       setSelectedItem(item);
       
@@ -93,7 +203,7 @@ const ShopPage: React.FC = () => {
           }
         }
       };
-      findAndAddItem(shopData);
+      findAndAddItem(displayData);
     });
 
     // In a real app, you'd integrate with a payment processor here
@@ -238,7 +348,7 @@ const ShopPage: React.FC = () => {
           <div className="lg:col-span-3">
             {viewMode === 'tree' ? (
               <HierarchicalShopTree
-                data={filterLevel === 'all' ? shopData : displayData}
+                data={displayData}
                 onAddToCart={handleAddToCart}
                 onViewDetails={handleViewDetails}
               />
