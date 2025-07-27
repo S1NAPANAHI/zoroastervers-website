@@ -1,5 +1,5 @@
 'use client'
-import { BookOpenIcon, DocumentTextIcon, FolderIcon, CollectionIcon, NewspaperIcon, ChartBarIcon } from '@heroicons/react/24/outline'
+import { BookOpenIcon, DocumentTextIcon, FolderIcon, RectangleStackIcon, NewspaperIcon, ChartBarIcon } from '@heroicons/react/24/outline'
 
 interface AdminSidebarProps {
   activeTab: string
@@ -10,7 +10,7 @@ export default function AdminSidebar({ activeTab, onTabChange }: AdminSidebarPro
   const tabs = [
     { id: 'overview', name: 'Overview', icon: ChartBarIcon },
     { id: 'books', name: 'Books', icon: BookOpenIcon },
-    { id: 'volumes', name: 'Volumes', icon: CollectionIcon },
+    { id: 'volumes', name: 'Volumes', icon: RectangleStackIcon },
     { id: 'sagas', name: 'Sagas', icon: FolderIcon },
     { id: 'arcs', name: 'Arcs', icon: DocumentTextIcon },
     { id: 'issues', name: 'Issues', icon: NewspaperIcon },
