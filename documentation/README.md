@@ -120,13 +120,13 @@ For detailed explanations of each folder and file, see: [📁 File Structure Gui
 - **Settings**: Preferences and privacy controls
 
 ### 🛡️ Admin Dashboard
-- **Role-Based Access**: Only admin users can access management features
-- **Shop Management**: Add, edit, delete shop items with rich forms
-- **Timeline Management**: Create and modify historical events
-- **User Management**: View user statistics and activity
-- **Content Statistics**: Real-time metrics and analytics
-- **Database Integration**: Direct CRUD operations with Supabase
-- **Protected Routes**: Admin-only pages with authentication guards
+- **Hierarchical Management**: Full CRUD for Books → Volumes → Sagas → Arcs → Issues
+- **Advanced Issue Manager**: Table view with filtering, search, and status management
+- **Modal-Based Editing**: Rich forms for adding/editing content with validation
+- **Real-time Updates**: Instant database synchronization with Supabase
+- **Role-Based Access**: Admin-only interface with authentication guards
+- **Professional UI**: Glassmorphism design with sidebar navigation
+- **Content Statistics**: Dashboard overview with quick actions and recent activity
 
 ### ⏰ Interactive Timeline
 - **1,700-Year Span**: Events from 500 CE to 2200 CE
