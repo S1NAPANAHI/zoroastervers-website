@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createBrowserClient } from '@supabase/ssr'
 import { supabase } from '../../lib/supabase';
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
 
@@ -206,75 +207,161 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
 
-  // Helper function to create our User object from Supabase user
-  const createUserFromSupabase = (supabaseUser: SupabaseUser): User => {
-    const username = supabaseUser.user_metadata?.full_name || 
-                    supabaseUser.user_metadata?.name || 
-                    supabaseUser.email?.split('@')[0] || 'User';
-    
-    return {
-      id: supabaseUser.id,
-      username,
-      email: supabaseUser.email || '',
-      avatar: supabaseUser.user_metadata?.avatar_url || '👤',
-      bio: supabaseUser.user_metadata?.bio || '',
-      joinDate: new Date(supabaseUser.created_at).toISOString().split('T')[0],
-      role: 'user',
-      isAdmin: false, // You can implement admin logic later
-      badges: [],
-      achievements: [{
-        id: 'welcome',
-        name: 'Welcome to ZOROASTER',
-        description: 'Successfully joined the universe',
-        icon: '🌟',
-        unlockedAt: new Date().toISOString().split('T')[0],
-        category: 'community'
-      }],
-      favorites: {
-        characters: [],
-        locations: [],
-        timelineEvents: [],
-        books: []
-      },
-      progress: {
-        booksRead: 0,
-        totalBooks: 5,
-        timelineExplored: 0,
-        charactersDiscovered: 0,
-        locationsExplored: 0
-      },
-      preferences: {
-        theme: 'dark',
-        spoilerLevel: 'none',
-        notifications: true
-      },
-      customPaths: [],
-      notes: []
-    };
+  // Helper function to load user profile from database
+  const loadUserProfile = async (supabaseUser: SupabaseUser): Promise<User | null> => {
+    try {
+      // Try to get user profile from database
+      const { data: profile, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', supabaseUser.id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') { // PGRST116 is "not found" error
+        console.error('Error loading user profile:', error);
+        return null;
+      }
+
+      if (profile) {
+        // Convert database profile to our User type
+        return {
+          id: profile.id,
+          username: profile.username,
+          email: profile.email,
+          avatar: profile.avatar || '👤',
+          bio: profile.bio || '',
+          joinDate: profile.join_date,
+          role: profile.role || 'user',
+          isAdmin: profile.is_admin || false,
+          badges: profile.badges || [],
+          achievements: profile.achievements || [],
+          favorites: profile.favorites || {
+            characters: [],
+            locations: [],
+            timelineEvents: [],
+            books: []
+          },
+          progress: profile.progress || {
+            booksRead: 0,
+            totalBooks: 5,
+            timelineExplored: 0,
+            charactersDiscovered: 0,
+            locationsExplored: 0
+          },
+          preferences: profile.preferences || {
+            theme: 'dark',
+            spoilerLevel: 'none',
+            notifications: true
+          },
+          customPaths: profile.custom_paths || [],
+          notes: profile.notes || []
+        };
+      } else {
+        // Profile doesn't exist, create default profile
+        const username = supabaseUser.user_metadata?.full_name || 
+                        supabaseUser.user_metadata?.name || 
+                        supabaseUser.email?.split('@')[0] || 'User';
+        
+        const defaultUser: User = {
+          id: supabaseUser.id,
+          username,
+          email: supabaseUser.email || '',
+          avatar: supabaseUser.user_metadata?.avatar_url || '👤',
+          bio: supabaseUser.user_metadata?.bio || '',
+          joinDate: new Date(supabaseUser.created_at).toISOString().split('T')[0],
+          role: 'user',
+          isAdmin: false,
+          badges: [],
+          achievements: [{
+            id: 'welcome',
+            name: 'Welcome to ZOROASTER',
+            description: 'Successfully joined the universe',
+            icon: '🌟',
+            unlockedAt: new Date().toISOString().split('T')[0],
+            category: 'community'
+          }],
+          favorites: {
+            characters: [],
+            locations: [],
+            timelineEvents: [],
+            books: []
+          },
+          progress: {
+            booksRead: 0,
+            totalBooks: 5,
+            timelineExplored: 0,
+            charactersDiscovered: 0,
+            locationsExplored: 0
+          },
+          preferences: {
+            theme: 'dark',
+            spoilerLevel: 'none',
+            notifications: true
+          },
+          customPaths: [],
+          notes: []
+        };
+
+        // Try to create the profile in the database
+        const { error: insertError } = await supabase
+          .from('users')
+          .insert([
+            {
+              id: defaultUser.id,
+              username: defaultUser.username,
+              email: defaultUser.email,
+              avatar: defaultUser.avatar,
+              bio: defaultUser.bio,
+              role: defaultUser.role,
+              is_admin: defaultUser.isAdmin,
+              badges: defaultUser.badges,
+              achievements: defaultUser.achievements,
+              favorites: defaultUser.favorites,
+              progress: defaultUser.progress,
+              preferences: defaultUser.preferences,
+              custom_paths: defaultUser.customPaths,
+              notes: defaultUser.notes
+            }
+          ]);
+
+        if (insertError) {
+          console.error('Error creating user profile:', insertError);
+        }
+
+        return defaultUser;
+      }
+    } catch (error) {
+      console.error('Error in loadUserProfile:', error);
+      return null;
+    }
   };
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       if (session?.user) {
-        const userData = createUserFromSupabase(session.user);
-        setUser(userData);
-        setIsAuthenticated(true);
-        localStorage.setItem('user', JSON.stringify(userData));
+        const userData = await loadUserProfile(session.user);
+        if (userData) {
+          setUser(userData);
+          setIsAuthenticated(true);
+          localStorage.setItem('user', JSON.stringify(userData));
+        }
       }
     });
 
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
       if (session?.user) {
-        const userData = createUserFromSupabase(session.user);
-        setUser(userData);
-        setIsAuthenticated(true);
-        localStorage.setItem('user', JSON.stringify(userData));
+        const userData = await loadUserProfile(session.user);
+        if (userData) {
+          setUser(userData);
+          setIsAuthenticated(true);
+          localStorage.setItem('user', JSON.stringify(userData));
+        }
       } else {
         setUser(null);
         setIsAuthenticated(false);
@@ -310,11 +397,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (data.user) {
-        const userData = createUserFromSupabase(data.user);
-        setUser(userData);
-        setIsAuthenticated(true);
-        localStorage.setItem('user', JSON.stringify(userData));
-        return true;
+        const userData = await loadUserProfile(data.user);
+        if (userData) {
+          setUser(userData);
+          setIsAuthenticated(true);
+          localStorage.setItem('user', JSON.stringify(userData));
+          return true;
+        }
       }
       
       return false;
@@ -329,7 +418,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/profile`
+          redirectTo: `${window.location.origin}/auth/callback`
         }
       });
 
@@ -352,7 +441,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'facebook',
         options: {
-          redirectTo: `${window.location.origin}/profile`
+          redirectTo: `${window.location.origin}/auth/callback`
         }
       });
 
@@ -391,11 +480,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // User will receive confirmation email
       // For now, we'll create a temporary user object
       if (data.user) {
-        const userData = createUserFromSupabase(data.user);
-        setUser(userData);
-        setIsAuthenticated(true);
-        localStorage.setItem('user', JSON.stringify(userData));
-        return true;
+        const userData = await loadUserProfile(data.user);
+        if (userData) {
+          setUser(userData);
+          setIsAuthenticated(true);
+          localStorage.setItem('user', JSON.stringify(userData));
+          return true;
+        }
       }
       
       return false;
