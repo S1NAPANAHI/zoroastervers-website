@@ -74,45 +74,43 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b border-white/5" style={{
-      background: 'rgba(15, 23, 42, 0.6)',
-      boxShadow: '0 0 30px rgba(34, 211, 238, 0.15), 0 0 60px rgba(168, 85, 247, 0.1)'
-    }}>
-      <div className="max-w-7xl mx-auto px-6 py-4">
+    <header className="fixed top-0 left-0 right-0 z-50 glass-dark border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           {/* Logo/Brand & Countdown */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-2 sm:space-x-6">
             <Link href="/" className="flex flex-col items-start">
-              <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 font-serif">
+              <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 font-serif">
                 ZOROASTER
               </div>
-              <div className="text-xs text-slate-400 font-light tracking-wide mt-0.5">
+              <div className="text-xs text-slate-400 font-light tracking-wide mt-0.5 hidden sm:block">
                 by Sina Panahi
               </div>
             </Link>
             
-            {/* Countdown Timer */}
-            <div className="hidden lg:flex">
+            {/* Countdown Timer - Mobile Compact */}
+            <div className="flex">
               {isExpired ? (
-                <div className="glass px-3 py-2 rounded-lg border border-green-400/30 bg-green-500/10">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-green-400 text-sm">🎉</span>
-                    <span className="text-green-400 text-sm font-medium">New Issue Available!</span>
+                <div className="glass px-2 sm:px-3 py-1 sm:py-2 rounded-lg border border-green-400/30 bg-green-500/10">
+                  <div className="flex items-center space-x-1 sm:space-x-2">
+                    <span className="text-green-400 text-xs sm:text-sm">🎉</span>
+                    <span className="text-green-400 text-xs sm:text-sm font-medium hidden sm:inline">New Issue Available!</span>
+                    <span className="text-green-400 text-xs font-medium sm:hidden">New!</span>
                   </div>
                 </div>
               ) : (
-                <div className="glass px-3 py-2 rounded-lg border border-purple-400/30 bg-purple-500/10">
-                  <div className="flex items-center space-x-3">
-                    <span className="text-purple-400 text-xs font-medium">Next Issue:</span>
+                <div className="glass px-2 sm:px-3 py-1 sm:py-2 rounded-lg border border-purple-400/30 bg-purple-500/10">
+                  <div className="flex items-center space-x-1 sm:space-x-3">
+                    <span className="text-purple-400 text-xs font-medium hidden lg:inline">Next Issue:</span>
                     <div className="flex items-center space-x-1">
-                      <span className="text-white text-sm font-bold">{timeLeft.days.toString().padStart(2, '0')}</span>
+                      <span className="text-white text-xs sm:text-sm font-bold">{timeLeft.days.toString().padStart(2, '0')}</span>
                       <span className="text-purple-300 text-xs">d</span>
                       <span className="text-purple-400">:</span>
-                      <span className="text-white text-sm font-bold">{timeLeft.hours.toString().padStart(2, '0')}</span>
+                      <span className="text-white text-xs sm:text-sm font-bold">{timeLeft.hours.toString().padStart(2, '0')}</span>
                       <span className="text-purple-300 text-xs">h</span>
-                      <span className="text-purple-400">:</span>
-                      <span className="text-white text-sm font-bold">{timeLeft.minutes.toString().padStart(2, '0')}</span>
-                      <span className="text-purple-300 text-xs">m</span>
+                      <span className="text-purple-400 hidden sm:inline">:</span>
+                      <span className="text-white text-xs sm:text-sm font-bold hidden sm:inline">{timeLeft.minutes.toString().padStart(2, '0')}</span>
+                      <span className="text-purple-300 text-xs hidden sm:inline">m</span>
                     </div>
                   </div>
                 </div>
@@ -157,10 +155,7 @@ const Header: React.FC = () => {
                 </button>
               </div>
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg glass border border-white/10 backdrop-blur-xl" role="menu" aria-orientation="vertical" aria-labelledby="options-menu" style={{
-                  background: 'rgba(15, 23, 42, 0.9)',
-                  boxShadow: '0 0 30px rgba(34, 211, 238, 0.15), 0 0 60px rgba(168, 85, 247, 0.1)'
-                }}>
+                <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg glass-dark border border-white/10 backdrop-blur-xl" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                   <div className="py-1" role="none">
                     <Link 
                       href="/timeline" 
@@ -283,10 +278,7 @@ const Header: React.FC = () => {
               ></div>
               
               {/* Sidebar */}
-              <div className="fixed top-0 right-0 h-full w-80 glass border-l border-white/10 backdrop-blur-xl z-50" style={{
-                background: 'rgba(15, 23, 42, 0.95)',
-                boxShadow: '0 0 30px rgba(34, 211, 238, 0.15), 0 0 60px rgba(168, 85, 247, 0.1)'
-              }}>
+              <div className="fixed top-0 right-0 h-full w-80 glass-dark border-l border-white/10 backdrop-blur-xl z-50">
                 <div className="p-6">
                   {/* Close Button */}
                   <div className="flex justify-end mb-8">

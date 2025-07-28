@@ -1,0 +1,44 @@
+{
+  "protagonist": {
+    "name": "John Doe",
+    "description": "A brave and adventurous soul, struggling to find his place in the world.",
+    "status": "active",
+    "importance_level": 10,
+    "is_main_character": true,
+    "is_protagonist": true,
+    "is_antagonist": false,
+    "age_range": "30-35",
+    "skills": ["leadership", "problem-solving"],
+    "motivations": "To protect his loved ones and find inner peace.",
+    "fears": "Failing those who depend on him.",
+    "tags": ["hero", "leader"]
+  },
+  "antagonist": {
+    "name": "Jane Smith",
+    "description": "Cunning and manipulative, always seeking power and control.",
+    "status": "active",
+    "importance_level": 10,
+    "is_main_character": true,
+    "is_protagonist": false,
+    "is_antagonist": true,
+    "age_range": "40-45",
+    "skills": ["strategizing", "resourcefulness"],
+    "motivations": "To ascend to ultimate power at any cost.",
+    "fears": "Losing control and influence.",
+    "tags": ["villain", "strategist"]
+  },
+  "supporting": {
+    "name": "Sam Taylor",
+    "description": "Loyal and amiable with a knack for bringing people together.",
+    "status": "active",
+    "importance_level": 5,
+    "is_main_character": false,
+    "is_protagonist": false,
+    "is_antagonist": false,
+    "age_range": "25-30",
+    "skills": ["communication", "networking"],
+    "motivations": "To support friends and maintain harmony.",
+    "fears": "Conflict and chaos among loved ones.",
+    "tags": ["support", "mediator"]
+  }
+}

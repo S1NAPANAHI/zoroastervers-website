@@ -23,6 +23,7 @@
   --accent-warning: #f59e0b;    /* Orange for warnings (6.8:1 on --bg-primary) */
   --accent-error: #ef4444;      /* Red for errors (4.7:1 on --bg-primary) */
   --accent-info: #06b6d4;       /* Cyan for info (5.7:1 on --bg-primary) */
+  --accent-pink: #ec4899;       /* Pink accent */
   
   /* Border Colors */
   --border-primary: #52525b;    /* Primary border (2.4:1 on --bg-primary) */
@@ -33,6 +34,15 @@
   --hover-bg: #3f3f46;         /* Hover background */
   --focus-ring: #38bdf8;        /* Focus ring color */
   --selection-bg: rgba(56, 189, 248, 0.2); /* Text selection background */
+  
+  /* Glassmorphism Variables */
+  --glass-bg: rgba(39, 39, 42, 0.6);      /* Standard glass background */
+  --glass-bg-dark: rgba(39, 39, 42, 0.9); /* Dark glass background */
+  --glass-bg-light: rgba(63, 63, 70, 0.6); /* Light glass background */
+  --glass-border: rgba(255, 255, 255, 0.1); /* Glass border */
+  --glass-border-accent: rgba(56, 189, 248, 0.3); /* Accent glass border */
+  --glass-blur: blur(20px);                /* Standard blur amount */
+  --glass-shadow: 0 0 30px rgba(34, 211, 238, 0.15), 0 0 60px rgba(168, 85, 247, 0.1); /* Glass shadow */
   
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -111,23 +121,39 @@ body::before {
 
 /* Accessible Glassmorphism Effects */
 .glass {
-  background: rgba(63, 63, 70, 0.6);  /* Using --bg-elevated with transparency */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-primary);
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
-  box-shadow: var(--shadow-lg);
-  color: var(--text-primary);  /* Ensure text is accessible */
+  box-shadow: var(--glass-shadow);
+  color: var(--text-primary);
 }
 
 .glass-dark {
-  background: rgba(39, 39, 42, 0.9);  /* Using --bg-tertiary with high opacity */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-secondary);
+  background: var(--glass-bg-dark);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
-  box-shadow: var(--shadow-xl);
-  color: var(--text-primary);  /* Ensure text is accessible */
+  box-shadow: var(--glass-shadow);
+  color: var(--text-primary);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--glass-border-accent);
+  box-shadow: var(--glass-shadow), 0 0 20px rgba(56, 189, 248, 0.2);
 }
 
 /* Accessible Neon Button Effects */
@@ -319,8 +345,182 @@ body::before {
 }
 
 .neon-button-pink:focus {
-  outline: 2px solid #ec4899;
+  outline: 2px solid var(--accent-pink);
   outline-offset: 2px;
+}
+
+/* Unified Button Variant System */
+.button-variant {
+  /* Base button styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  color: var(--text-primary);
+}
+
+.button-variant:focus {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Primary variant - Blue/Cyan theme */
+.button-variant--primary {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.4), var(--shadow-md);
+}
+
+.button-variant--primary:hover {
+  box-shadow: 
+    0 0 30px rgba(56, 189, 248, 0.8),
+    0 0 50px rgba(56, 189, 248, 0.6),
+    var(--shadow-lg);
+  transform: scale(1.05) translateY(-2px);
+}
+
+/* Secondary variant - Purple theme */
+.button-variant--secondary {
+  background: linear-gradient(135deg, var(--accent-secondary), var(--accent-secondary-hover));
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.4), var(--shadow-md);
+}
+
+.button-variant--secondary:hover {
+  box-shadow: 
+    0 0 30px rgba(168, 85, 247, 0.8),
+    0 0 50px rgba(168, 85, 247, 0.6),
+    var(--shadow-lg);
+  transform: scale(1.05) translateY(-2px);
+}
+
+/* Success variant - Green theme */
+.button-variant--success {
+  background: linear-gradient(135deg, var(--accent-success), #16a34a);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.4), var(--shadow-md);
+}
+
+.button-variant--success:hover {
+  box-shadow: 
+    0 0 30px rgba(34, 197, 94, 0.8),
+    0 0 50px rgba(34, 197, 94, 0.6),
+    var(--shadow-lg);
+  transform: scale(1.05) translateY(-2px);
+}
+
+.button-variant--success:focus {
+  outline-color: var(--accent-success);
+}
+
+/* Warning variant - Orange theme */
+.button-variant--warning {
+  background: linear-gradient(135deg, var(--accent-warning), #d97706);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.4), var(--shadow-md);
+}
+
+.button-variant--warning:hover {
+  box-shadow: 
+    0 0 30px rgba(245, 158, 11, 0.8),
+    0 0 50px rgba(245, 158, 11, 0.6),
+    var(--shadow-lg);
+  transform: scale(1.05) translateY(-2px);
+}
+
+.button-variant--warning:focus {
+  outline-color: var(--accent-warning);
+}
+
+/* Danger variant - Red theme */
+.button-variant--danger {
+  background: linear-gradient(135deg, var(--accent-error), #dc2626);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4), var(--shadow-md);
+}
+
+.button-variant--danger:hover {
+  box-shadow: 
+    0 0 30px rgba(239, 68, 68, 0.8),
+    0 0 50px rgba(239, 68, 68, 0.6),
+    var(--shadow-lg);
+  transform: scale(1.05) translateY(-2px);
+}
+
+.button-variant--danger:focus {
+  outline-color: var(--accent-error);
+}
+
+/* Info variant - Cyan theme */
+.button-variant--info {
+  background: linear-gradient(135deg, var(--accent-info), #0891b2);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4), var(--shadow-md);
+}
+
+.button-variant--info:hover {
+  box-shadow: 
+    0 0 30px rgba(6, 182, 212, 0.8),
+    0 0 50px rgba(6, 182, 212, 0.6),
+    var(--shadow-lg);
+  transform: scale(1.05) translateY(-2px);
+}
+
+.button-variant--info:focus {
+  outline-color: var(--accent-info);
+}
+
+/* Pink variant - Pink theme */
+.button-variant--pink {
+  background: linear-gradient(135deg, var(--accent-pink), #db2777);
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.4), var(--shadow-md);
+}
+
+.button-variant--pink:hover {
+  box-shadow: 
+    0 0 30px rgba(236, 72, 153, 0.8),
+    0 0 50px rgba(236, 72, 153, 0.6),
+    var(--shadow-lg);
+  transform: scale(1.05) translateY(-2px);
+}
+
+.button-variant--pink:focus {
+  outline-color: var(--accent-pink);
+}
+
+/* Glass variant - Transparent with glassmorphism */
+.button-variant--glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.button-variant--glass:hover {
+  border-color: var(--glass-border-accent);
+  box-shadow: var(--glass-shadow), 0 0 20px rgba(56, 189, 248, 0.3);
+  transform: scale(1.02) translateY(-1px);
+}
+
+/* Size variants */
+.button-variant--sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.button-variant--lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+.button-variant--xl {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.25rem;
 }
 
 /* Glowing Cards */

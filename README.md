@@ -404,6 +404,591 @@ This project is proprietary software for the ZOROASTER universe by Sina Panahi.
 - [ ] Audio timeline narration
 - [ ] VR/AR timeline exploration
 
+## 📋 Database Schema
+
+### Hierarchical Content Structure
+
+The application uses a 5-level hierarchical database structure:
+
+```
+Books → Volumes → Sagas → Arcs → Issues
+```
+
+#### Core Tables
+
+**Books Table**
+```sql
+CREATE TABLE books (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  author TEXT NOT NULL DEFAULT 'S1NAPANAHI',
+  price DECIMAL(10,2) DEFAULT 0,
+  cover_image_url TEXT,
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'archived')),
+  total_word_count INTEGER DEFAULT 0,
+  is_complete BOOLEAN DEFAULT FALSE,
+  physical_available BOOLEAN DEFAULT FALSE,
+  digital_bundle BOOLEAN DEFAULT FALSE,
+  publication_date DATE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+**Volumes Table**
+```sql
+CREATE TABLE volumes (
+  id SERIAL PRIMARY KEY,
+  book_id INTEGER NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  description TEXT,
+  price DECIMAL(10,2) DEFAULT 0,
+  order_index INTEGER NOT NULL DEFAULT 1,
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'archived')),
+  physical_available BOOLEAN DEFAULT FALSE,
+  digital_bundle BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(book_id, order_index)
+);
+```
+
+**Issues Table** (Final level)
+```sql
+CREATE TABLE issues (
+  id SERIAL PRIMARY KEY,
+  arc_id INTEGER NOT NULL REFERENCES arcs(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  description TEXT,
+  price DECIMAL(10,2) DEFAULT 0,
+  word_count INTEGER DEFAULT 0,
+  order_index INTEGER NOT NULL DEFAULT 1,
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'pre-order', 'coming-soon')),
+  release_date DATE,
+  content_url TEXT,
+  cover_image_url TEXT,
+  tags TEXT[],
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(arc_id, order_index)
+);
+```
+
+#### Character Management Schema
+
+**Characters Table**
+```sql
+CREATE TABLE characters (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  aliases TEXT[],
+  description TEXT,
+  appearance JSONB,
+  height TEXT,
+  weight TEXT,
+  eye_color TEXT,
+  hair_color TEXT,
+  age_range TEXT,
+  personality JSONB,
+  skills TEXT[],
+  abilities TEXT[],
+  weaknesses TEXT[],
+  motivations TEXT,
+  fears TEXT,
+  avatar_url TEXT,
+  images JSONB,
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'deceased', 'unknown')),
+  importance_level INTEGER DEFAULT 5 CHECK (importance_level >= 1 AND importance_level <= 10),
+  is_main_character BOOLEAN DEFAULT FALSE,
+  is_antagonist BOOLEAN DEFAULT FALSE,
+  is_protagonist BOOLEAN DEFAULT FALSE,
+  universe_id INTEGER,
+  series_id INTEGER,
+  season_id INTEGER,
+  work_id INTEGER,
+  first_appearance TEXT,
+  creator TEXT,
+  voice_actor TEXT,
+  tags TEXT[],
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  created_by INTEGER,
+  updated_by INTEGER
+);
+```
+
+#### Security & Permissions
+
+- **Row Level Security (RLS)** enabled on all tables
+- **Admin-only policies** for full CRUD operations
+- **Public read policies** for published content only
+- **Cascade delete operations** maintain data integrity
+
+## 🔌 API Endpoints
+
+### Admin Content Management
+
+#### Books API
+- `GET /api/admin/books` - List all books with nested data
+- `POST /api/admin/books` - Create new book
+- `GET /api/admin/books/[id]` - Get specific book
+- `PUT /api/admin/books/[id]` - Update book
+- `DELETE /api/admin/books/[id]` - Delete book (cascades)
+
+#### Volumes API
+- `GET /api/admin/volumes` - List volumes with filtering
+- `POST /api/admin/volumes` - Create new volume
+- `PUT /api/admin/volumes/[id]` - Update volume
+- `DELETE /api/admin/volumes/[id]` - Delete volume
+
+#### Issues API
+- `GET /api/admin/issues` - List issues with full hierarchy
+- `POST /api/admin/issues` - Create new issue
+- `PUT /api/admin/issues/[id]` - Update issue
+- `DELETE /api/admin/issues/[id]` - Delete issue
+
+### Character Management API
+
+#### Characters
+- `GET /api/characters` - List characters with advanced filtering
+  - Query Parameters: `search`, `status`, `importance`, `sort`, `order`, `limit`, `offset`
+  - Export formats: `format=json|csv`
+- `POST /api/characters` - Create character or bulk import
+- `GET /api/characters/[id]` - Get specific character
+- `PUT /api/characters/[id]` - Update character
+- `DELETE /api/characters/[id]` - Delete character
+
+#### Character Relationships
+- `GET /api/characters/relationships` - List character relationships
+- `POST /api/characters/relationships` - Create relationship
+- `PUT /api/characters/relationships/[id]` - Update relationship
+- `DELETE /api/characters/relationships/[id]` - Delete relationship
+
+#### Bulk Operations
+- `POST /api/characters/bulk-import` - Import characters from CSV/JSON
+- `GET /api/characters/bulk-import/preview` - Preview import data
+- `GET /api/characters/templates` - Get import templates
+
+### Public API
+
+#### Timeline
+- `GET /api/timeline` - Get timeline events
+- `POST /api/timeline` - Create timeline event (admin)
+- `PUT /api/timeline` - Update timeline event (admin)
+- `DELETE /api/timeline` - Delete timeline event (admin)
+
+#### Shop
+- `GET /api/shop` - Get published shop items
+- `GET /api/shop-items/hierarchy` - Get hierarchical shop structure
+
+#### Posts (Creator Blog)
+- `GET /api/posts` - List published blog posts
+- `GET /api/posts/[slug]` - Get specific post by slug
+- `POST /api/admin/posts` - Create post (admin)
+- `PUT /api/admin/posts/[id]` - Update post (admin)
+
+### API Response Format
+
+**Success Response:**
+```json
+{
+  "data": [...],
+  "pagination": {
+    "offset": 0,
+    "limit": 50,
+    "total": 100
+  }
+}
+```
+
+**Error Response:**
+```json
+{
+  "error": "Error message",
+  "details": "Additional error context"
+}
+```
+
+## 🧩 Component Usage Guide
+
+### Admin Components
+
+#### BookManager
+```typescript
+import BookManager from '@/app/components/admin/BookManager'
+
+// Usage in admin dashboard
+<BookManager />
+```
+
+**Features:**
+- Full CRUD operations for books
+- Status management (draft/published/archived)
+- Search and filtering
+- Hierarchical data display with nested volumes/sagas/arcs/issues
+
+#### CharacterManager
+```typescript
+import CharacterManager from '@/app/components/admin/CharacterManager'
+
+// Usage with props
+<CharacterManager 
+  searchTerm="" 
+  statusFilter="all"
+  importanceFilter="all"
+/>
+```
+
+**Features:**
+- Character CRUD operations
+- Advanced filtering and search
+- Bulk import/export (CSV/JSON)
+- Relationship management
+- Tag system integration
+
+### Public Components
+
+#### EnhancedTimeline
+```typescript
+import EnhancedTimeline from '@/app/components/EnhancedTimeline'
+
+// Main timeline component
+<EnhancedTimeline />
+```
+
+**Features:**
+- Interactive 1,700-year timeline (500 CE - 2200 CE)
+- Expandable event cards with detailed descriptions
+- Dynamic background gradients
+- Book navigation ribbons
+- Scroll-based animations
+
+#### Shop Components
+
+```typescript
+// Hierarchical shop tree
+import HierarchicalShopTree from '@/app/components/shop/HierarchicalShopTree'
+<HierarchicalShopTree />
+
+// Grid view for products
+import GridView from '@/app/components/shop/GridView'
+<GridView products={products} onAddToCart={handleAddToCart} />
+
+// Shopping cart drawer
+import CartDrawer from '@/app/components/shop/CartDrawer'
+<CartDrawer isOpen={isOpen} onClose={handleClose} />
+```
+
+### Context Providers
+
+#### AuthContext
+```typescript
+import { useAuth } from '@/app/contexts/AuthContext'
+
+function MyComponent() {
+  const { user, login, logout, isAdmin } = useAuth()
+  
+  return (
+    <div>
+      {isAdmin && <AdminPanel />}
+      {user ? <UserDashboard /> : <LoginForm />}
+    </div>
+  )
+}
+```
+
+#### CartContext
+```typescript
+import { useCart } from '@/app/contexts/CartContext'
+
+function ShopComponent() {
+  const { 
+    items, 
+    addItem, 
+    removeItem, 
+    updateQuantity, 
+    total,
+    itemCount 
+  } = useCart()
+  
+  return (
+    <div>
+      <button onClick={() => addItem(product)}>Add to Cart</button>
+      <span>Items: {itemCount} | Total: ${total}</span>
+    </div>
+  )
+}
+```
+
+### Custom Hooks
+
+#### useSWR for Data Fetching
+```typescript
+import useSWR from 'swr'
+
+// Fetch books with auto-refresh
+const { data: books, error, mutate } = useSWR('/api/admin/books', fetcher)
+
+// Fetch characters with filtering
+const { data: characters } = useSWR(
+  `/api/characters?search=${search}&status=${status}`,
+  fetcher
+)
+```
+
+## 🤝 Contributor Guidelines
+
+### Getting Started
+
+1. **Fork the Repository**
+   ```bash
+   git clone https://github.com/yourusername/novel-worldbuilding-hub.git
+   cd novel-worldbuilding-hub
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   # or yarn install / pnpm install / bun install
+   ```
+
+3. **Set Up Environment**
+   ```bash
+   cp .env.example .env.local
+   # Fill in your Supabase credentials
+   ```
+
+4. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
+
+### Development Workflow
+
+#### Branch Naming Convention
+- `feature/feature-name` - New features
+- `fix/bug-description` - Bug fixes
+- `docs/documentation-update` - Documentation changes
+- `refactor/component-name` - Code refactoring
+- `test/test-description` - Test additions/updates
+
+#### Commit Message Format
+```
+type(scope): description
+
+Optional body explaining the change in detail.
+
+Fixes #issue-number
+```
+
+**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+
+#### Pull Request Process
+
+1. **Create Feature Branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+
+2. **Make Changes**
+   - Follow existing code style and patterns
+   - Add appropriate TypeScript types
+   - Include tests for new functionality
+   - Update documentation as needed
+
+3. **Test Your Changes**
+   ```bash
+   npm run test        # Unit tests
+   npm run test:e2e    # End-to-end tests
+   npm run lint        # Code linting
+   ```
+
+4. **Submit Pull Request**
+   - Provide clear description of changes
+   - Reference related issues
+   - Include screenshots for UI changes
+   - Ensure all checks pass
+
+### Code Standards
+
+#### TypeScript
+- Use strict TypeScript configuration
+- Define interfaces for all data structures
+- Prefer type inference where possible
+- Use meaningful type names
+
+```typescript
+// Good
+interface Character {
+  id: number
+  name: string
+  status: 'active' | 'inactive' | 'deceased'
+}
+
+// Avoid
+interface CharData {
+  id: any
+  name: any
+  status: string
+}
+```
+
+#### React Components
+- Use functional components with hooks
+- Implement proper prop types
+- Use descriptive component names
+- Keep components focused and reusable
+
+```typescript
+// Good
+interface BookCardProps {
+  book: Book
+  onEdit: (book: Book) => void
+  onDelete: (id: number) => void
+}
+
+export default function BookCard({ book, onEdit, onDelete }: BookCardProps) {
+  // Component implementation
+}
+```
+
+#### CSS/Styling
+- Use Tailwind CSS utility classes
+- Follow the established design system
+- Use glassmorphism effects for UI elements
+- Maintain consistent spacing and typography
+
+```tsx
+// Good - consistent with app styling
+<div className="glass-dark rounded-2xl border border-white/20 p-6">
+  <h3 className="text-xl font-bold text-white mb-4">Title</h3>
+</div>
+```
+
+#### API Routes
+- Follow RESTful conventions
+- Include proper error handling
+- Use appropriate HTTP status codes
+- Validate input data
+- Return consistent JSON structure
+
+```typescript
+// Good API route structure
+export async function GET(request: NextRequest) {
+  try {
+    // Validation
+    const { searchParams } = new URL(request.url)
+    const limit = parseInt(searchParams.get('limit') || '50')
+    
+    // Database query
+    const { data, error } = await supabase
+      .from('table')
+      .select('*')
+      .limit(limit)
+    
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+    
+    return NextResponse.json(data)
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
+```
+
+### Testing Guidelines
+
+#### Unit Tests
+- Test all utility functions
+- Test component rendering and interactions
+- Test API route handlers
+- Aim for 80%+ code coverage
+
+```typescript
+// Example component test
+import { render, screen, fireEvent } from '@testing-library/react'
+import BookCard from '@/components/BookCard'
+
+test('renders book card with title', () => {
+  const mockBook = { id: 1, title: 'Test Book', status: 'published' }
+  render(<BookCard book={mockBook} onEdit={jest.fn()} onDelete={jest.fn()} />)
+  
+  expect(screen.getByText('Test Book')).toBeInTheDocument()
+})
+```
+
+#### E2E Tests
+- Test critical user journeys
+- Test admin functionality
+- Test responsive design
+- Include accessibility testing
+
+```typescript
+// Example E2E test
+import { test, expect } from '@playwright/test'
+
+test('admin can create new book', async ({ page }) => {
+  await page.goto('/admin')
+  await page.click('text=Add New Book')
+  await page.fill('[data-testid=book-title]', 'New Test Book')
+  await page.click('text=Save')
+  
+  await expect(page.locator('text=New Test Book')).toBeVisible()
+})
+```
+
+### Database Contributions
+
+#### Migration Guidelines
+- Create new migration files for schema changes
+- Include both `up` and `down` migrations
+- Test migrations thoroughly
+- Document breaking changes
+
+#### Adding New Tables
+1. Create migration file
+2. Define TypeScript interfaces
+3. Create API routes
+4. Add admin components (if needed)
+5. Include tests
+6. Update documentation
+
+### Documentation Requirements
+
+- Update README for new features
+- Add JSDoc comments for complex functions
+- Include API documentation for new endpoints
+- Provide component usage examples
+- Update type definitions
+
+### Security Guidelines
+
+- Never commit sensitive data (API keys, passwords)
+- Use environment variables for configuration
+- Implement proper input validation
+- Follow Row Level Security (RLS) patterns
+- Sanitize user input
+- Use HTTPS in production
+
+### Performance Considerations
+
+- Optimize images and assets
+- Use appropriate caching strategies
+- Implement proper loading states
+- Minimize bundle size
+- Use lazy loading where appropriate
+- Monitor Core Web Vitals
+
+### Questions or Issues?
+
+- Check existing issues before creating new ones
+- Use discussions for general questions
+- Tag maintainers for urgent issues
+- Provide detailed reproduction steps
+- Include relevant logs and screenshots
+
 ---
 
 **Built with ❤️ using Next.js, TypeScript, and modern web technologies.**

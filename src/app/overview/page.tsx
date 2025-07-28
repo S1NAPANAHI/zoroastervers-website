@@ -83,15 +83,15 @@ const SeriesOverviewPage: React.FC = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-8">
         {/* Hero Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <div className="mb-6">
-            <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 mb-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 mb-4">
               Series Overview
             </h1>
-            <div className="text-2xl text-slate-300 font-light mb-6">
+            <div className="text-xl sm:text-2xl text-slate-300 font-light mb-4 sm:mb-6">
               A Complete Guide to the Universe
             </div>
-            <p className="text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed px-4">
               Welcome to a sprawling universe where magic and technology collide, ancient powers awaken, 
               and the fate of multiple worlds hangs in the balance. Explore this comprehensive guide to 
               understand the foundations of our story without encountering spoilers.
@@ -99,12 +99,12 @@ const SeriesOverviewPage: React.FC = () => {
           </div>
 
           {/* Spoiler Control */}
-          <div className="glass-dark p-6 rounded-2xl border border-white/20 max-w-2xl mx-auto">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center justify-center">
+          <div className="glass-dark p-4 sm:p-6 rounded-2xl border border-white/20 max-w-2xl mx-auto">
+            <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center justify-center">
               <span className="mr-2">🛡️</span>
               Spoiler Protection Level
             </h3>
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {[
                 { level: 'none' as const, label: 'Complete Safety', desc: 'No plot details' },
                 { level: 'minimal' as const, label: 'Light Context', desc: 'Basic background only' },
@@ -113,13 +113,13 @@ const SeriesOverviewPage: React.FC = () => {
                 <button
                   key={level}
                   onClick={() => setSpoilerLevel(level)}
-                  className={`p-3 rounded-lg border transition-all ${
+                  className={`p-2 sm:p-3 rounded-lg border transition-all text-center ${
                     spoilerLevel === level
                       ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300'
-                      : 'bg-white/5 border-white/20 text-slate-300 hover:bg-white/10'
+                      : 'glass-dark border-white/20 text-slate-300 hover:bg-white/10'
                   }`}
                 >
-                  <div className="font-medium">{label}</div>
+                  <div className="font-medium text-sm sm:text-base">{label}</div>
                   <div className="text-xs opacity-75">{desc}</div>
                 </button>
               ))}
@@ -128,18 +128,18 @@ const SeriesOverviewPage: React.FC = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {[
             { icon: '📚', label: 'Books', value: '5 Planned', detail: '3 Published' },
             { icon: '🌍', label: 'Worlds', value: '7 Realms', detail: 'Interconnected' },
             { icon: '⏳', label: 'Timeline', value: '3,000 Years', detail: 'Of recorded history' },
             { icon: '✨', label: 'Magic System', value: 'Crystal-Based', detail: 'Technology hybrid' }
           ].map(({ icon, label, value, detail }) => (
-            <div key={label} className="glass-dark p-6 rounded-2xl border border-white/20 text-center">
-              <div className="text-3xl mb-2">{icon}</div>
-              <div className="text-cyan-400 font-bold text-lg">{value}</div>
-              <div className="text-slate-300 text-sm">{label}</div>
-              <div className="text-slate-400 text-xs mt-1">{detail}</div>
+            <div key={label} className="glass-dark p-3 sm:p-6 rounded-2xl border border-white/20 text-center">
+              <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">{icon}</div>
+              <div className="text-cyan-400 font-bold text-sm sm:text-lg">{value}</div>
+              <div className="text-slate-300 text-xs sm:text-sm">{label}</div>
+              <div className="text-slate-400 text-xs mt-1 hidden sm:block">{detail}</div>
             </div>
           ))}
         </div>

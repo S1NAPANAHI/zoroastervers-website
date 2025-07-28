@@ -47,11 +47,11 @@ const GridView: React.FC<GridViewProps> = ({ data, onAddToCart, onViewDetails })
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
       {data.map((item) => (
         <div
           key={item.id}
-          className="group relative glass-dark rounded-2xl border border-white/20 p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] hover:border-cyan-400/50"
+          className="group relative glass-dark rounded-2xl border border-white/20 p-4 sm:p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] hover:border-cyan-400/50"
         >
           {/* Savings Badge */}
           {item.bundleInfo && (
@@ -71,28 +71,28 @@ const GridView: React.FC<GridViewProps> = ({ data, onAddToCart, onViewDetails })
 
           <div className="text-center">
             {/* Icon */}
-            <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
+            <div className="text-4xl sm:text-5xl lg:text-6xl mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
               {getTypeIcon(item.type)}
             </div>
 
             {/* Title */}
-            <h3 className="font-bold text-white text-lg mb-3 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+            <h3 className="font-bold text-white text-base sm:text-lg mb-2 sm:mb-3 line-clamp-2 group-hover:text-cyan-400 transition-colors">
               {item.title}
             </h3>
 
             {/* Description */}
-            <p className="text-purple-200 text-sm mb-4 line-clamp-3 h-16">
+            <p className="text-purple-200 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-3 h-12 sm:h-16">
               {item.description}
             </p>
 
             {/* Pricing */}
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               {item.bundleInfo && (
-                <div className="text-sm text-white/60 line-through mb-1">
+                <div className="text-xs sm:text-sm text-white/60 line-through mb-1">
                   {BundlePricingCalculator.formatPrice(item.bundleInfo.individualPrice)}
                 </div>
               )}
-              <div className="text-3xl font-bold text-cyan-400 mb-2">
+              <div className="text-2xl sm:text-3xl font-bold text-cyan-400 mb-1 sm:mb-2">
                 {BundlePricingCalculator.formatPrice(item.price)}
               </div>
               {item.bundleInfo && (
@@ -105,17 +105,17 @@ const GridView: React.FC<GridViewProps> = ({ data, onAddToCart, onViewDetails })
             </div>
 
             {/* Action Buttons */}
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               <button
                 onClick={() => handleAddToCart(item)}
-                className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-lg transform hover:scale-105"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-lg transform hover:scale-105 text-sm sm:text-base"
               >
                 🛒 Add to Cart
               </button>
               
               <button
                 onClick={() => onViewDetails(item.id, item.type)}
-                className="w-full px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors duration-200 text-sm"
+                className="w-full px-3 sm:px-4 py-2 glass-dark hover:bg-white/20 text-white rounded-lg transition-colors duration-200 text-xs sm:text-sm"
               >
                 👁️ View Details
               </button>

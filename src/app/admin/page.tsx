@@ -9,6 +9,7 @@ import VolumeManager from '../components/admin/VolumeManager'
 import SagaManager from '../components/admin/SagaManager'
 import ArcManager from '../components/admin/ArcManager'
 import IssueManager from '../components/admin/IssueManager'
+import CharacterManager from '../components/admin/CharacterManager'
 import AdminOverview from '../components/admin/AdminOverview'
 
 interface AdminStats {
@@ -68,11 +69,12 @@ const AdminDashboard: React.FC = () => {
           </div>
           
           {activeTab === 'overview' && <AdminOverview stats={stats} />}
-{activeTab === 'books' && <BookManager />}
-{activeTab === 'volumes' && <VolumeManager />}
-{activeTab === 'sagas' && <SagaManager />}
-          {activeTab === 'arcs' && <ArcManager />}
-          {activeTab === 'issues' && <IssueManager />}
+    {activeTab === 'books' && <BookManager />}
+    {activeTab === 'volumes' && <VolumeManager />}
+    {activeTab === 'sagas' && <SagaManager />}
+    {activeTab === 'arcs' && <ArcManager />}
+    {activeTab === 'issues' && <IssueManager />}
+    {activeTab === 'characters' && <CharacterManager />}
         </div>
       </div>
     </div>

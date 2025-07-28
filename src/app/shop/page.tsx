@@ -230,11 +230,11 @@ const ShopPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="container mx-auto px-4 pt-32 pb-16">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 font-serif drop-shadow-2xl mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 font-serif drop-shadow-2xl mb-4">
             📚 ZOROASTER Shop
           </h1>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto mb-6">
+          <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto mb-6">
             Explore our hierarchical collection - from single issues to complete book series. 
             Each level offers better value through intelligent bundling.
           </p>
@@ -259,24 +259,24 @@ const ShopPage: React.FC = () => {
         </div>
 
         {/* Controls */}
-        <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setViewMode('tree')}
-              className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+              className={`px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 text-sm sm:text-base ${
                 viewMode === 'tree' 
                   ? 'bg-cyan-500 text-white shadow-lg' 
-                  : 'bg-white/10 text-white hover:bg-white/20'
+                  : 'glass-dark text-white hover:bg-white/20'
               }`}
             >
               🌳 Tree View
             </button>
             <button
               onClick={() => setViewMode('grid')}
-              className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+              className={`px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 text-sm sm:text-base ${
                 viewMode === 'grid' 
                   ? 'bg-cyan-500 text-white shadow-lg' 
-                  : 'bg-white/10 text-white hover:bg-white/20'
+                  : 'glass-dark text-white hover:bg-white/20'
               }`}
             >
               📋 Grid View
@@ -286,7 +286,7 @@ const ShopPage: React.FC = () => {
           <select
             value={filterLevel}
             onChange={(e) => setFilterLevel(e.target.value as FilterLevel)}
-            className="px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:border-cyan-400 focus:outline-none"
+            className="px-3 py-2 rounded-lg glass-dark text-white border border-white/20 focus:border-cyan-400 focus:outline-none text-sm sm:text-base"
           >
             <option value="all">All Levels</option>
             <option value="books">Books Only</option>
@@ -299,7 +299,7 @@ const ShopPage: React.FC = () => {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortBy)}
-            className="px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:border-cyan-400 focus:outline-none"
+            className="px-3 py-2 rounded-lg glass-dark text-white border border-white/20 focus:border-cyan-400 focus:outline-none text-sm sm:text-base"
           >
             <option value="release">Release Date</option>
             <option value="price">Price</option>
@@ -309,10 +309,10 @@ const ShopPage: React.FC = () => {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
           {/* Sidebar with quick navigation */}
           <div className="lg:col-span-1">
-            <div className="glass-dark rounded-2xl border border-white/20 p-6 sticky top-32">
+            <div className="glass-dark rounded-2xl border border-white/20 p-4 sm:p-6 sticky top-24 sm:top-32">
               <h3 className="text-xl font-bold text-white mb-4">Quick Navigation</h3>
               <div className="space-y-2">
                 <button className="w-full text-left p-3 rounded-lg hover:bg-white/10 text-white transition-colors">

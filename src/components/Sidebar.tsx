@@ -54,10 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
           textOrientation: 'mixed'
         }}
       >
-        <div className="glass px-2 py-4 rounded-r-lg border border-white/10 hover:border-cyan-400/30 transition-all group" style={{
-          background: 'rgba(15, 23, 42, 0.9)',
-          boxShadow: '0 0 30px rgba(34, 211, 238, 0.15), 0 0 60px rgba(168, 85, 247, 0.1)'
-        }}>
+        <div className="glass-dark px-2 py-4 rounded-r-lg border border-white/10 hover:border-cyan-400/30 transition-all group">
           <span className="text-2xl text-cyan-400 group-hover:text-purple-400 transition-colors">📑</span>
         </div>
       </button>
@@ -90,11 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
       >
         <aside 
           ref={sidebarRef}
-          className="fixed inset-y-0 left-0 w-80 glass border-r border-white/10 backdrop-blur-xl z-40 overflow-y-auto" 
-          style={{
-            background: 'rgba(15, 23, 42, 0.95)',
-            boxShadow: '0 0 30px rgba(34, 211, 238, 0.15), 0 0 60px rgba(168, 85, 247, 0.1)'
-          }}
+          className="fixed inset-y-0 left-0 w-80 glass-dark border-r border-white/10 backdrop-blur-xl z-40 overflow-y-auto"
         >
           {/* Header */}
           <div className="p-6 border-b border-white/10">
