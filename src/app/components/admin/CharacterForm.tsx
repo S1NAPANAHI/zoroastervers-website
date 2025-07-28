@@ -417,7 +417,7 @@ export default function CharacterForm({ character, onClose, onSave, availableCha
                         type="text"
                         {...field}
                         className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-orange-400"
-                        placeholder="e.g., 5'8", 170cm"
+                        placeholder="e.g., 5'8&quot;, 170cm"
                       />
                     )}
                   />

@@ -28,7 +28,12 @@ export interface ProgressHookOptions extends DataHookOptions {
 // API helpers for progress operations
 export const progressApi = {
   async update(data: UserProgressUpdate & { item_id: number; item_type: string }): Promise<UserProgress> {
-    const response = await apiClient.patch<UserProgress>('/api/books/progress', data);
+    // Add XP and gamification logic
+    const xpGained = Math.ceil((data.percent_complete || 0) / 10);
+    const response = await apiClient.patch<UserProgress>('/api/books/progress', {
+      ...data,
+      xp_gained: xpGained
+    });
     return response.data;
   },
 
@@ -169,10 +174,24 @@ export function useProgress(options?: ProgressHookOptions) {
     position: string,
     percentComplete?: number
   ) => {
-    return updateProgress(itemId, itemType, {
+    const result = await updateProgress(itemId, itemType, {
       last_position: position,
       percent_complete: percentComplete,
     });
+    
+    // Save the last-read path for "Resume" functionality
+    if (position && typeof window !== "undefined") {
+      const resumeData = {
+        itemId,
+        itemType,
+        position,
+        path: window.location.pathname,
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem('lastReadProgress', JSON.stringify(resumeData));
+    }
+    
+    return result;
   }, [updateProgress]);
 
   // Helper to log reading time

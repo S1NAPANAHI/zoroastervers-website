@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Transition } from '@headlessui/react';
 import Link from 'next/link';
+import { ProgressBar, LevelProgressBar } from '@/components/ProgressBar';
+import { GamificationService } from '@/services/gamificationService';
 
 interface SidebarProps {
   user?: {
@@ -12,6 +14,7 @@ interface SidebarProps {
       booksRead: number;
       totalBooks: number;
       timelineExplored: number;
+      xp?: number;
     };
     achievements: string[];
     notes: string[];
@@ -177,34 +180,54 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
           {user && (
             <div className="px-6 pb-6 border-t border-white/5 pt-6">
               <h3 className="text-slate-400 text-xs font-medium uppercase tracking-wide mb-4">Your Progress</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between glass px-3 py-2 rounded-lg border border-white/10">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-cyan-400">📚</span>
-                    <span className="text-slate-300 text-sm">Books Read</span>
+              <div className="space-y-4">
+                {/* Level Progress */}
+                {(() => {
+                  const totalXP = (user.progress?.xp || 0);
+                  const levelData = GamificationService.calculateLevel(totalXP);
+                  return (
+                    <LevelProgressBar 
+                      levelData={levelData}
+                      showDetails={false}
+                      className="glass px-3 py-2 rounded-lg border border-white/10"
+                    />
+                  );
+                })()}
+
+                {/* Resume Reading Button */}
+                {(() => {
+                  const resumeData = GamificationService.getResumeData();
+                  return resumeData ? (
+                    <Link
+                      href={resumeData.path}
+                      className="flex items-center space-x-2 glass px-3 py-2 rounded-lg border border-green-400/30 bg-green-400/10 hover:bg-green-400/20 transition-all group"
+                    >
+                      <span className="text-green-400 group-hover:scale-110 transition-transform">▶️</span>
+                      <span className="text-green-400 text-sm font-medium">Resume Reading</span>
+                    </Link>
+                  ) : null;
+                })()}
+
+                {/* Reading Progress */}
+                <ProgressBar
+                  current={user.progress.booksRead}
+                  total={user.progress.totalBooks}
+                  label="Books Read"
+                  color="cyan"
+                  size="sm"
+                  className="glass px-3 py-2 rounded-lg border border-white/10"
+                />
+
+                {/* Quick Stats */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="glass px-2 py-1 rounded border border-white/10 text-center">
+                    <div className="text-purple-400 font-bold text-sm">{user.achievements.length}</div>
+                    <div className="text-slate-400 text-xs">🏆</div>
                   </div>
-                  <span className="text-cyan-400 font-bold">{user.progress.booksRead}/{user.progress.totalBooks}</span>
-                </div>
-                <div className="flex items-center justify-between glass px-3 py-2 rounded-lg border border-white/10">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-purple-400">🏆</span>
-                    <span className="text-slate-300 text-sm">Achievements</span>
+                  <div className="glass px-2 py-1 rounded border border-white/10 text-center">
+                    <div className="text-green-400 font-bold text-sm">{user.progress.timelineExplored}%</div>
+                    <div className="text-slate-400 text-xs">⏰</div>
                   </div>
-                  <span className="text-purple-400 font-bold">{user.achievements.length}</span>
-                </div>
-                <div className="flex items-center justify-between glass px-3 py-2 rounded-lg border border-white/10">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-green-400">⏰</span>
-                    <span className="text-slate-300 text-sm">Timeline</span>
-                  </div>
-                  <span className="text-green-400 font-bold">{user.progress.timelineExplored}%</span>
-                </div>
-                <div className="flex items-center justify-between glass px-3 py-2 rounded-lg border border-white/10">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-pink-400">📝</span>
-                    <span className="text-slate-300 text-sm">Notes</span>
-                  </div>
-                  <span className="text-pink-400 font-bold">{user.notes.length}</span>
                 </div>
               </div>
             </div>
