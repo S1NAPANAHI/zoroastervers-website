@@ -1,8 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { TreeNode, CartItem } from '@/types/shop';
 import { BundlePricingCalculator } from '@/utils/bundlePricing';
+import InlineRating from '../reviews/InlineRating';
+import ReviewPanel from '../reviews/ReviewPanel';
 
 interface GridViewProps {
   data: TreeNode[];
@@ -11,6 +13,7 @@ interface GridViewProps {
 }
 
 const GridView: React.FC<GridViewProps> = ({ data, onAddToCart, onViewDetails }) => {
+  const [reviewModalOpen, setReviewModalOpen] = useState<{itemId: number, itemType: string, itemTitle: string} | null>(null);
   const getTypeIcon = (type: string) => {
     const icons = {
       book: '📚',
@@ -119,6 +122,13 @@ const GridView: React.FC<GridViewProps> = ({ data, onAddToCart, onViewDetails })
               >
                 👁️ View Details
               </button>
+              
+              <button
+                onClick={() => setReviewModalOpen({itemId: item.id, itemType: item.type, itemTitle: item.title})}
+                className="w-full px-3 sm:px-4 py-2 glass-dark hover:bg-white/20 text-white rounded-lg transition-colors duration-200 text-xs sm:text-sm"
+              >
+                ⭐ Reviews
+              </button>
             </div>
 
             {/* Additional Info */}
@@ -130,8 +140,11 @@ const GridView: React.FC<GridViewProps> = ({ data, onAddToCart, onViewDetails })
                 </div>
               )}
               <div className="flex items-center space-x-1">
-                <span>⭐</span>
-                <span>4.8/5</span>
+                <InlineRating 
+                  itemId={item.id} 
+                  itemType={item.type} 
+                  onClick={() => setReviewModalOpen({itemId: item.id, itemType: item.type, itemTitle: item.title})} 
+                />
               </div>
             </div>
           </div>
@@ -140,6 +153,16 @@ const GridView: React.FC<GridViewProps> = ({ data, onAddToCart, onViewDetails })
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-400/10 to-purple-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         </div>
       ))}
+      
+      {/* Review Panel Modal */}
+      {reviewModalOpen && (
+        <ReviewPanel 
+          itemId={reviewModalOpen.itemId} 
+          itemType={reviewModalOpen.itemType} 
+          itemTitle={reviewModalOpen.itemTitle} 
+          onClose={() => setReviewModalOpen(null)} 
+        />
+      )}
     </div>
   );
 };

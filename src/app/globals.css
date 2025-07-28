@@ -777,3 +777,43 @@ select:focus {
 .skip-link:focus {
   top: 6px;
 }
+
+/* Spoiler Blur Styles */
+.spoiler-blur {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
+  cursor: pointer;
+}
+
+.spoiler-blur:hover,
+.spoiler-reveal {
+  filter: blur(0px);
+}
+
+/* Orange button variant */
+.neon-button-orange {
+  background: linear-gradient(135deg, var(--accent-warning), #d97706);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.4), var(--shadow-md);
+  color: var(--text-primary);  /* Accessible white text */
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.neon-button-orange:hover {
+  box-shadow: 
+    0 0 30px rgba(245, 158, 11, 0.8),
+    0 0 50px rgba(245, 158, 11, 0.6),
+    var(--shadow-lg);
+  transform: scale(1.05) translateY(-2px);
+}
+
+.neon-button-orange:focus {
+  outline: 2px solid var(--accent-warning);
+  outline-offset: 2px;
+}

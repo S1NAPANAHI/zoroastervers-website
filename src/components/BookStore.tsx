@@ -1,9 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import InlineRating from '../app/components/reviews/InlineRating';
+import ReviewPanel from '../app/components/reviews/ReviewPanel';
 
 export default function BookStore() {
   const [selectedFormat, setSelectedFormat] = useState<{[key: number]: string}>({});
+  const [reviewModalOpen, setReviewModalOpen] = useState<{itemId: number, itemType: string, itemTitle: string} | null>(null);
 
   const books = [
     {
@@ -81,16 +84,18 @@ export default function BookStore() {
             
             {/* Rating */}
             <div className="flex items-center mb-4">
-              <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className={i < Math.floor(book.rating) ? "text-yellow-400" : "text-gray-600"}>
-                    ⭐
-                  </span>
-                ))}
-              </div>
-              <span className="text-[#b3b3b3] text-sm ml-2">
-                {book.rating} ({book.reviews} reviews)
-              </span>
+              <InlineRating 
+                itemId={index + 1} 
+                itemType="book" 
+                onClick={() => setReviewModalOpen({itemId: index + 1, itemType: 'book', itemTitle: book.title})} 
+                size="md"
+              />
+              <button 
+                onClick={() => setReviewModalOpen({itemId: index + 1, itemType: 'book', itemTitle: book.title})}
+                className="ml-2 text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+              >
+                View Reviews
+              </button>
             </div>
             
             {/* Format Selection */}
@@ -143,6 +148,16 @@ export default function BookStore() {
           </button>
         </div>
       </div>
+      
+      {/* Review Panel Modal */}
+      {reviewModalOpen && (
+        <ReviewPanel 
+          itemId={reviewModalOpen.itemId} 
+          itemType={reviewModalOpen.itemType} 
+          itemTitle={reviewModalOpen.itemTitle} 
+          onClose={() => setReviewModalOpen(null)} 
+        />
+      )}
     </div>
   );
 }

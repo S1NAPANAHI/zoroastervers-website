@@ -90,6 +90,11 @@ export interface TreeNode {
     bundlePrice: number;
     discount: number;
   };
+  // Add rating info
+  rating?: {
+    average: number;
+    count: number;
+  };
 }
 
 export interface CartItem {

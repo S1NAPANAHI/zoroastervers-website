@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { TreeNode, CartItem } from '@/types/shop';
 import { BundlePricingCalculator } from '@/utils/bundlePricing';
+import InlineRating from '../reviews/InlineRating';
+import ReviewPanel from '../reviews/ReviewPanel';
 
 interface HierarchicalShopTreeProps {
   data: TreeNode[];
@@ -16,6 +18,7 @@ const HierarchicalShopTree: React.FC<HierarchicalShopTreeProps> = ({
   onViewDetails 
 }) => {
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
+  const [reviewModalOpen, setReviewModalOpen] = useState<{itemId: number, itemType: string, itemTitle: string} | null>(null);
 
   const toggleNode = (nodeId: string) => {
     const newExpanded = new Set(expandedNodes);
@@ -171,6 +174,33 @@ const HierarchicalShopTree: React.FC<HierarchicalShopTreeProps> = ({
             {node.description}
           </div>
 
+          {/* Rating and Review Section */}
+          <div className="mt-3 flex items-center justify-between">
+            <InlineRating
+              itemId={parseInt(node.id)}
+              itemType={node.type}
+              onClick={() => setReviewModalOpen({
+                itemId: parseInt(node.id),
+                itemType: node.type,
+                itemTitle: node.title
+              })}
+              size="sm"
+            />
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setReviewModalOpen({
+                  itemId: parseInt(node.id),
+                  itemType: node.type,
+                  itemTitle: node.title
+                });
+              }}
+              className="text-xs bg-white/10 hover:bg-white/20 px-2 py-1 rounded transition-colors duration-200"
+            >
+              📝 Reviews
+            </button>
+          </div>
+
           {/* Progress indicator for partially complete series */}
           {hasChildren && (
             <div className="mt-3">
@@ -201,9 +231,22 @@ const HierarchicalShopTree: React.FC<HierarchicalShopTreeProps> = ({
   };
 
   return (
-    <div className="space-y-4">
-      {data.map(node => renderNode(node))}
-    </div>
+    <>
+      <div className="space-y-4">
+        {data.map(node => renderNode(node))}
+      </div>
+      
+      {/* Review Modal */}
+      {reviewModalOpen && (
+        <ReviewPanel
+          itemId={reviewModalOpen.itemId}
+          itemType={reviewModalOpen.itemType as 'book' | 'volume' | 'saga' | 'arc' | 'issue'}
+          itemTitle={reviewModalOpen.itemTitle}
+          isModal={true}
+          onClose={() => setReviewModalOpen(null)}
+        />
+      )}
+    </>
   );
 };
 
