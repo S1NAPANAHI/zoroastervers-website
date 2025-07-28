@@ -1,6 +1,14 @@
+'use client';
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import ForceGraph2D from 'react-force-graph-2d';
+import dynamic from 'next/dynamic';
 import { fetchAvailableRoutes, chooseRoute } from '../services/routeService';
+
+// Dynamically import ForceGraph2D to avoid SSR issues
+const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center h-96">Loading visualization...</div>
+});
 
 interface RouteMapProps {
   itemId: string;

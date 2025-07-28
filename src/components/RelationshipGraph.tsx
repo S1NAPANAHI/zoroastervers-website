@@ -1,6 +1,12 @@
 'use client'
 import React, { useRef, useEffect, useCallback, useState } from 'react';
-import ForceGraph2D from 'react-force-graph-2d';
+import dynamic from 'next/dynamic';
+
+// Dynamically import ForceGraph2D to avoid SSR issues
+const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center h-96 bg-gray-900 rounded-lg">Loading graph...</div>
+});
 
 interface CharacterNode {
   id: number;
