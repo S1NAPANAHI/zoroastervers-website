@@ -1,1 +1,1 @@
-﻿export { default as InteractiveTimelineEvent } from './InteractiveTimelineEvent';
+export { InteractiveTimelineEvent } from './InteractiveTimelineEvent';

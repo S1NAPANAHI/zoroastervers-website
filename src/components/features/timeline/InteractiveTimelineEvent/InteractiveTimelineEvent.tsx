@@ -239,4 +239,4 @@ const InteractiveTimelineEvent: React.FC<InteractiveTimelineEventProps> = ({
   );
 };
 
-export default InteractiveTimelineEvent;
+export { InteractiveTimelineEvent };

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
-import InteractiveTimelineEvent from '../InteractiveTimelineEvent';
+import { InteractiveTimelineEvent } from '../InteractiveTimelineEvent';
 
 interface TimelineEvent {
   id: string;
@@ -744,4 +744,4 @@ const EnhancedTimeline: React.FC = () => {
   );
 };
 
-export default EnhancedTimeline;
+export { EnhancedTimeline };

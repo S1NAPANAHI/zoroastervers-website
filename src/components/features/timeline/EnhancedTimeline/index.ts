@@ -1,1 +1,1 @@
-﻿export { default as EnhancedTimeline } from './EnhancedTimeline';
+export { EnhancedTimeline } from './EnhancedTimeline';
