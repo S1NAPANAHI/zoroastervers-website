@@ -216,6 +216,61 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Beta Program Section */}
+        <section className="py-20 px-4 bg-gradient-to-r from-primary-900/20 to-accent-purple-900/20">
+          <div className="container mx-auto max-w-6xl">
+            <div className="glass-dark p-8 lg:p-12 rounded-3xl border border-primary-400/30 relative overflow-hidden">
+              {/* Background Effects */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-accent-purple-500/10"></div>
+              <div className="absolute top-4 right-4 w-32 h-32 bg-accent-cyan-500/10 rounded-full blur-2xl animate-pulse"></div>
+              <div className="absolute bottom-4 left-4 w-24 h-24 bg-primary-500/10 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}}></div>
+              
+              <div className="relative z-10 text-center">
+                <div className="mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-primary-400 to-accent-purple-400 rounded-full mb-4">
+                    <span className="text-2xl">🚀</span>
+                  </div>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-accent-purple-400 to-accent-cyan-400 mb-4">
+                    Join the Beta Reader Program
+                  </h2>
+                  <p className="text-lg lg:text-xl text-secondary-300 max-w-3xl mx-auto leading-relaxed">
+                    Be among the first to experience new chapters, provide feedback, and shape the future of the Zoroaster universe. 
+                    Get exclusive access to unreleased content and connect directly with the author.
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="text-center">
+                    <div className="text-3xl mb-3">📖</div>
+                    <h3 className="text-lg font-semibold text-secondary-50 mb-2">Early Access</h3>
+                    <p className="text-secondary-400 text-sm">Read new chapters before official release</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl mb-3">💬</div>
+                    <h3 className="text-lg font-semibold text-secondary-50 mb-2">Direct Feedback</h3>
+                    <p className="text-secondary-400 text-sm">Share your thoughts directly with the author</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl mb-3">👥</div>
+                    <h3 className="text-lg font-semibold text-secondary-50 mb-2">Exclusive Community</h3>
+                    <p className="text-secondary-400 text-sm">Connect with fellow beta readers and fans</p>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <Link href="/beta/apply" className="neon-button-purple px-8 py-4 rounded-lg text-lg font-semibold flex items-center gap-2">
+                    <span>🌟</span>
+                    Apply for Beta Program
+                  </Link>
+                  <div className="text-secondary-400 text-sm">
+                    Limited spots available • Application required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Testimonials Section */}
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
