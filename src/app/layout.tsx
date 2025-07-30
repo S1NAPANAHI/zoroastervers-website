@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display, Crimson_Text, EB_Garamond } from 'next/font/google';
+import localFont from 'next/font/local';
+import { Playfair_Display, Crimson_Text, EB_Garamond } from 'next/font/google';
 import '@styles/globals.css';
 import { AuthProvider } from '@app/contexts/AuthContext';
 import { CartProvider } from '@app/contexts/CartContext';
@@ -7,14 +8,14 @@ import { InlineAdminModeProvider } from '@contexts/InlineAdminModeContext';
 import { ToastProvider } from '@contexts/ToastContext';
 import { Header } from '@components/layout';
 import { InlineAdminEditToggle, AdminDashboardLink } from '@components/features/admin';
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const geist = localFont({ 
+  src: "../../public/fonts/geist/GeistVariable.woff2", 
+  variable: "--font-geist" 
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const geistMono = localFont({ 
+  src: "../../public/fonts/geist-mono/GeistMonoVariable.woff2", 
+  variable: "--font-geist-mono" 
 });
 
 const crimsonText = Crimson_Text({
@@ -54,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${crimsonText.variable} ${playfairDisplay.variable} ${ebGaramond.variable} antialiased`}
+        className={`${geist.variable} ${geistMono.variable} ${crimsonText.variable} ${playfairDisplay.variable} ${ebGaramond.variable} antialiased`}
       >
         <AuthProvider>
           <CartProvider>

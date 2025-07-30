@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import ReactMarkdown from 'react-markdown'
 import Image from 'next/image'
+import BackButton from './BackButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,9 +24,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900 text-slate-200 pt-28 pb-12">
       <div className="max-w-3xl mx-auto px-4">
-        <button onClick={() => history.back()} className="text-cyan-400 mb-6 hover:underline">
-          ← Back
-        </button>
+        <BackButton />
 
         <span className="text-xs uppercase tracking-wide text-cyan-400 mb-1 block">{post.category}</span>
         <h1 className="text-4xl font-bold mb-4">{post.title}</h1>

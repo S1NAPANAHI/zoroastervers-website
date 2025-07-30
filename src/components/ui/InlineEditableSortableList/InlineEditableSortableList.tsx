@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { DndContext, closestCenter, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon as GripVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useInlineAdminMode } from '@/app/contexts/InlineAdminModeContext';
 import { useToast } from '@/app/contexts/ToastContext';
 import InlineEditableField from '../InlineEditableField';
