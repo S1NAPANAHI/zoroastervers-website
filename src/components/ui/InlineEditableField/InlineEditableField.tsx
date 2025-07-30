@@ -2,8 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { CheckIcon, XMarkIcon, PencilIcon } from '@heroicons/react/24/outline';
-import { useInlineAdminMode } from '../contexts/InlineAdminModeContext';
-import { useToast } from '../contexts/ToastContext';
+import { useInlineAdminMode } from '@/app/contexts/InlineAdminModeContext';
+import { useToast } from '@/app/contexts/ToastContext';
 import { mutate } from 'swr';
 
 interface InlineEditableFieldProps {

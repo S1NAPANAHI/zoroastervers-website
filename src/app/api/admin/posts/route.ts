@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { Post } from '@/lib/supabase'
-import slugify from '@/utils/slugify'
+import { slugify } from '@/lib/utils'
 
 // GET all posts (admin – includes drafts)
 export async function GET() {

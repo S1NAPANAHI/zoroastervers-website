@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import slugify from '@/utils/slugify'
+import { slugify } from '@/lib/utils'
 
 // PUT /api/admin/posts/[id]
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {

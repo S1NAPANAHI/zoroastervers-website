@@ -1,5 +1,5 @@
 'use client';
-import Newsletter from '../ui/Newsletter';
+import Newsletter from '../../ui/Newsletter';
 
 export default function Footer() {
   return (

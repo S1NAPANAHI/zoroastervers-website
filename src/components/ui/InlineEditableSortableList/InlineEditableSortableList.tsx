@@ -5,10 +5,10 @@ import { DndContext, closestCenter, DragEndEvent, DragOverlay, DragStartEvent } 
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { useInlineAdminMode } from '../contexts/InlineAdminModeContext';
-import { useToast } from '../contexts/ToastContext';
+import { useInlineAdminMode } from '@/app/contexts/InlineAdminModeContext';
+import { useToast } from '@/app/contexts/ToastContext';
+import InlineEditableField from '../InlineEditableField';
 import { mutate } from 'swr';
-import InlineEditableField from './InlineEditableField';
 
 interface SortableItem {
   id: string;

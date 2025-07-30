@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { TreeNode, CartItem } from '@/types/shop';
-import { BundlePricingCalculator } from '@/utils/bundlePricing';
-import InlineRating from '../reviews/InlineRating';
-import ReviewPanel from '../reviews/ReviewPanel';
+import { BundlePricingCalculator } from '@/lib/utils';
+import InlineRating from '../../reviews/InlineRating';
+import ReviewPanel from '../../reviews/ReviewPanel';
 
 interface HierarchicalShopTreeProps {
   data: TreeNode[];

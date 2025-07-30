@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useCart } from '../../contexts/CartContext';
-import { BundlePricingCalculator } from '@/utils/bundlePricing';
+import { useCart } from '@/app/contexts/CartContext';
+import { BundlePricingCalculator } from '@/lib/utils';
 
 interface CartDrawerProps {
   isOpen: boolean;

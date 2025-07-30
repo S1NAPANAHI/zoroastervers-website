@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { PurchaseOption, BundleRecommendation } from '@/types/shop';
-import { BundlePricingCalculator } from '@/utils/bundlePricing';
+import { BundlePricingCalculator } from '@/lib/utils';
 
 interface ProgressivePurchaseModalProps {
   isOpen: boolean;

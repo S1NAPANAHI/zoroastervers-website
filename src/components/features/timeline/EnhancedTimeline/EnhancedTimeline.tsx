@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import InteractiveTimelineEvent from './InteractiveTimelineEvent';
+import { useAuth } from '@/app/contexts/AuthContext';
+import InteractiveTimelineEvent from '../InteractiveTimelineEvent';
 
 interface TimelineEvent {
   id: string;
