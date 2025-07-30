@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { ReviewInsert } from '@/lib/types';
-import { validateRequest, validateQuery, ReviewCreateSchema, ReviewQuerySchema, sanitizeHtml } from '@/lib/validation';
+import { validateRequest, validateQuery, ReviewCreateSchema, ReviewQuerySchema, sanitizeHtml } from '@/lib/validations';
 import { applyReviewRateLimit, applyGeneralRateLimit } from '@/lib/rateLimit';
 
 // POST /api/books/reviews - Create a new review (Authenticated)

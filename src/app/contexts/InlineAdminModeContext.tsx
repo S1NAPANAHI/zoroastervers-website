@@ -70,7 +70,18 @@ export function InlineAdminModeProvider({ children }: InlineAdminModeProviderPro
 export function useInlineAdminMode() {
   const context = useContext(InlineAdminModeContext);
   if (context === undefined) {
-    throw new Error('useInlineAdminMode must be used within an InlineAdminModeProvider');
+    // During SSG or if no provider is available, return default values
+    // This prevents errors during static generation
+    return {
+      isInlineAdminMode: false,
+      setIsInlineAdminMode: () => {},
+      isEditing: null,
+      setIsEditing: () => {},
+      editingData: {},
+      setEditingData: () => {},
+      clearEditingData: () => {},
+      clearAllEditingData: () => {},
+    };
   }
   return context;
 }

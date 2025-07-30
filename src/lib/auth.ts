@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { supabase } from './supabase'
-import { sanitizeHtml, isValidUuid } from './validation'
+import { sanitizeHtml, isValidUuid } from './validations'
 
 export interface AuthUser {
   id: string

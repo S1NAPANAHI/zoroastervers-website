@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { UserProgressInsert, UserProgressUpdate } from '@/lib/types';
-import { validateRequest, validateQuery, UserProgressCreateSchema, UserProgressUpdateSchema, UserProgressQuerySchema } from '@/lib/validation';
+import { validateRequest, validateQuery, UserProgressCreateSchema, UserProgressUpdateSchema, UserProgressQuerySchema } from '@/lib/validations';
 import { applyProgressRateLimit, applyGeneralRateLimit } from '@/lib/rateLimit';
 
 // PATCH /api/books/progress - Update user progress (Authenticated)

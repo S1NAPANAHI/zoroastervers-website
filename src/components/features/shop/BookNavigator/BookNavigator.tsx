@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import EasterEggContainer from '../../admin/EasterEggContainer'
+import { EasterEggContainer } from '../../admin/EasterEggContainer'
 
 function BookNavigator() {
   const [selectedBook, setSelectedBook] = useState<any>(null);

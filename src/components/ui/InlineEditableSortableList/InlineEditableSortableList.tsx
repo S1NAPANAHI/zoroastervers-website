@@ -7,7 +7,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Bars3Icon as GripVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useInlineAdminMode } from '@/app/contexts/InlineAdminModeContext';
 import { useToast } from '@/app/contexts/ToastContext';
-import InlineEditableField from '../InlineEditableField';
+import { InlineEditableField } from '../InlineEditableField';
 import { mutate } from 'swr';
 
 interface SortableItem {
