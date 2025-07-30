@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { BundleRecommendation } from '@/types/shop';
-import { BundlePricingCalculator } from '@/utils/bundlePricing';
+import { BundlePricingCalculator } from '@/lib/utils';
 
 interface BundleRecommendationsProps {
   currentItem: any;

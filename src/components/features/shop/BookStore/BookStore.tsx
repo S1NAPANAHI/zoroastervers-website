@@ -8,7 +8,7 @@ import { formatPrice } from '@/lib/utils';
 import InlineRating from '../../reviews/InlineRating';
 import ReviewPanel from '../../reviews/ReviewPanel';
 import EasterEggContainer from '../../admin/EasterEggContainer';
-import InlineEditableField from '../../ui/InlineEditableField';
+import InlineEditableField from '@/components/ui/InlineEditableField';
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 

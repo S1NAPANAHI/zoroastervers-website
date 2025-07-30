@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ReviewInsert } from '@/lib/types';
-import { reviewsApi } from '@/hooks/useReviews';
+import { reviewsApi } from '@/lib/hooks/useReviews';
 
 // Define form schema using Zod
 const reviewSchema = z.object({
