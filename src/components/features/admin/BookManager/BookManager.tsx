@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
-import BookModal from '@/components/features/admin/BookModal'
+import { BookModal } from '@/components/features/admin/BookModal'
 
 interface Book {
   id: number

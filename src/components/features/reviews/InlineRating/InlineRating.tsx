@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import StarRating from '../StarRating';
+import { StarRating } from '../StarRating';
 
 interface InlineRatingProps {
   itemId: number;

@@ -1,1 +1,2 @@
-﻿export { default as InlineRating } from './InlineRating';
+export { default } from './InlineRating';
+export { default as InlineRating } from './InlineRating';

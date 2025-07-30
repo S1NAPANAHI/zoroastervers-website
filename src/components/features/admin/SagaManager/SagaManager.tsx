@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
-import SagaModal from '../SagaModal/SagaModal'
+import { SagaModal } from '../SagaModal'
 
 interface Saga {
   id: number

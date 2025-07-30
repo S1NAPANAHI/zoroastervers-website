@@ -1,1 +1,2 @@
-﻿export { default as EasterEggContainer } from './EasterEggContainer';
+export { default } from './EasterEggContainer';
+export { default as EasterEggContainer } from './EasterEggContainer';

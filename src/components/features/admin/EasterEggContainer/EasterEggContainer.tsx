@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import EasterEgg from '@/components/features/admin/EasterEgg';
+import { EasterEgg } from '@/components/features/admin/EasterEgg';
 import { useEasterEggs } from '@/lib/hooks/useEasterEggs';
 
 interface EasterEggContainerProps {

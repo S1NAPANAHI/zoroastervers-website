@@ -1,1 +1,2 @@
-﻿export { default as StarRating } from './StarRating';
+export { default } from './StarRating';
+export { default as StarRating } from './StarRating';

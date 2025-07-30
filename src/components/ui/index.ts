@@ -3,6 +3,7 @@ export { CountdownTimer } from './CountdownTimer';
 export { ImageUploader } from './ImageUploader';
 export { InlineEditableField } from './InlineEditableField';
 export { InlineEditableSortableList } from './InlineEditableSortableList';
+export { LevelProgressBar } from './LevelProgressBar';
 export { MarkdownEditor } from './MarkdownEditor';
 export { MultiTagInput } from './MultiTagInput';
 export { Newsletter } from './Newsletter';

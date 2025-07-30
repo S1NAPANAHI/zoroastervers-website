@@ -1,1 +1,2 @@
-﻿export { default as HierarchicalShopTree } from './HierarchicalShopTree';
+export { default } from './HierarchicalShopTree';
+export { default as HierarchicalShopTree } from './HierarchicalShopTree';

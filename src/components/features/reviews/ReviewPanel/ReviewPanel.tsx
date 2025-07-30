@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useReviews } from '@/lib/hooks/useReviews';
 import { useAuth } from '@/app/contexts/AuthContext';
-import StarRating from '../StarRating';
-import RatingDistribution from '../RatingDistribution';
-import ReviewList from '../ReviewList';
-import ReviewForm from '../ReviewForm';
+import { StarRating } from '../StarRating';
+import { RatingDistribution } from '../RatingDistribution';
+import { ReviewList } from '../ReviewList';
+import { ReviewForm } from '../ReviewForm';
 
 interface ReviewPanelProps {
   itemId: number;

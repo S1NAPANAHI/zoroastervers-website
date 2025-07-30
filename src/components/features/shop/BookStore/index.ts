@@ -1,1 +1,2 @@
-﻿export { default as BookStore } from './BookStore';
+export { default } from './BookStore';
+export { default as BookStore } from './BookStore';

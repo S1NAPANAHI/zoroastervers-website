@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
-import IssueModal from '@/components/features/admin/IssueModal'
+import { IssueModal } from '@/components/features/admin/IssueModal'
 
 interface Issue {
   id: number

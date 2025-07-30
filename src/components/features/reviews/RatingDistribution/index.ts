@@ -1,1 +1,2 @@
-﻿export { default as RatingDistribution } from './RatingDistribution';
+export { default } from './RatingDistribution';
+export { default as RatingDistribution } from './RatingDistribution';

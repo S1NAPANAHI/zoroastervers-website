@@ -1,1 +1,2 @@
-﻿export { default as ReviewPanel } from './ReviewPanel';
+export { default } from './ReviewPanel';
+export { default as ReviewPanel } from './ReviewPanel';

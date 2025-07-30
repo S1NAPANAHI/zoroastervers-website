@@ -19,7 +19,7 @@ import {
   Transition 
 } from '@headlessui/react'
 import { Fragment } from 'react'
-import CharacterModal from '@/components/features/admin/CharacterModal'
+import { CharacterModal } from '@/components/features/admin/CharacterModal'
 
 interface Character {
   id: number

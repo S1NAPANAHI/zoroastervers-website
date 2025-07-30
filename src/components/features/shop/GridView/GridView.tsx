@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { TreeNode, CartItem } from '@/types/shop';
 import { BundlePricingCalculator } from '@/lib/utils';
-import InlineRating from '../../reviews/InlineRating';
-import ReviewPanel from '../../reviews/ReviewPanel';
+import { InlineRating } from '../../reviews/InlineRating';
+import { ReviewPanel } from '../../reviews/ReviewPanel';
 
 interface GridViewProps {
   data: TreeNode[];

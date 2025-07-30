@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import EasterEggAdminToggle from '@/components/features/admin/EasterEggAdminToggle';
-import BookStore from '@/components/features/shop/BookStore';
-import BookNavigator from '@/components/features/shop/BookNavigator';
+import { EasterEggAdminToggle } from '@/components/features/admin/EasterEggAdminToggle';
+import { BookStore } from '@/components/features/shop/BookStore';
+import { BookNavigator } from '@/components/features/shop/BookNavigator';
 
 export default function EasterEggAdminPanel() {
   const [inlineModeEnabled, setInlineModeEnabled] = useState(false);

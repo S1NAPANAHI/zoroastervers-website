@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { TreeNode, CartItem } from '@/types/shop';
 import { useInventory } from '@/lib/hooks/useInventory';
 import { useCart } from '@/app/contexts/CartContext';
-import HierarchicalShopTree from '../HierarchicalShopTree';
-import GridView from '../GridView';
+import { HierarchicalShopTree } from '../HierarchicalShopTree';
+import { GridView } from '../GridView';
 
 interface InventoryExplorerProps {
   initialData?: TreeNode[];

@@ -5,10 +5,10 @@ import useSWR from 'swr';
 import { useCart } from '@/app/contexts/CartContext'
 import { CartItem } from '@/types/shop';
 import { formatPrice } from '@/lib/utils';
-import InlineRating from '../../reviews/InlineRating';
-import ReviewPanel from '../../reviews/ReviewPanel';
-import EasterEggContainer from '../../admin/EasterEggContainer';
-import InlineEditableField from '@/components/ui/InlineEditableField';
+import { InlineRating } from '../../reviews/InlineRating';
+import { ReviewPanel } from '../../reviews/ReviewPanel';
+import { EasterEggContainer } from '../../admin/EasterEggContainer';
+import { InlineEditableField } from '@/components/ui/InlineEditableField';
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
