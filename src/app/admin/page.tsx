@@ -3,14 +3,17 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import AdminSidebar from '../components/admin/AdminSidebar'
-import BookManager from '../components/admin/BookManager'
-import VolumeManager from '../components/admin/VolumeManager'
-import SagaManager from '../components/admin/SagaManager'
-import ArcManager from '../components/admin/ArcManager'
-import IssueManager from '../components/admin/IssueManager'
-import CharacterManager from '../components/admin/CharacterManager'
-import AdminOverview from '../components/admin/AdminOverview'
+import { 
+  AdminSidebar,
+  BookManager,
+  VolumeManager,
+  SagaManager,
+  ArcManager,
+  IssueManager,
+  CharacterManager,
+  AdminOverview,
+  EasterEggAdminPanel
+} from '@components/features/admin'
 
 interface AdminStats {
   totalUsers: number
@@ -75,6 +78,7 @@ const AdminDashboard: React.FC = () => {
     {activeTab === 'arcs' && <ArcManager />}
     {activeTab === 'issues' && <IssueManager />}
     {activeTab === 'characters' && <CharacterManager />}
+    {activeTab === 'easter-eggs' && <EasterEggAdminPanel />}
         </div>
       </div>
     </div>

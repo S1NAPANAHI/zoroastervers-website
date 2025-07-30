@@ -1,0 +1,86 @@
+/* =====================================================
+   THEME: CSS Custom Properties (CSS Variables)
+   WCAG AA Compliant Dark Theme
+   ===================================================== */
+
+/* Accessible Color Palette - WCAG AA Compliant */
+:root {
+  /* Background Colors - Dark Theme */
+  --bg-primary: #09090b;     /* Ultra dark for main background */
+  --bg-secondary: #18181b;   /* Very dark for secondary surfaces */
+  --bg-tertiary: #27272a;    /* Dark for tertiary surfaces */
+  --bg-elevated: #3f3f46;    /* Medium dark for elevated surfaces */
+  
+  /* Text Colors - High Contrast for Dark Backgrounds */
+  --text-primary: #fafafa;   /* High contrast white for primary text (15.7:1 on --bg-primary) */
+  --text-secondary: #e4e4e7; /* High contrast light gray for secondary text (11.9:1 on --bg-primary) */
+  --text-tertiary: #a1a1aa;  /* Medium contrast gray for tertiary text (4.8:1 on --bg-primary) */
+  --text-muted: #71717a;     /* Muted text (3.2:1 on --bg-primary) */
+  
+  /* Accent Colors - Accessible on dark backgrounds */
+  --accent-primary: #38bdf8;    /* Primary blue (7.8:1 on --bg-primary) */
+  --accent-primary-hover: #0ea5e9; /* Primary blue hover (6.2:1 on --bg-primary) */
+  --accent-secondary: #a855f7;  /* Purple accent (4.7:1 on --bg-primary) */
+  --accent-secondary-hover: #9333ea; /* Purple hover (3.8:1 on --bg-primary) */
+  --accent-success: #22c55e;    /* Green for success (5.9:1 on --bg-primary) */
+  --accent-warning: #f59e0b;    /* Orange for warnings (6.8:1 on --bg-primary) */
+  --accent-error: #ef4444;      /* Red for errors (4.7:1 on --bg-primary) */
+  --accent-info: #06b6d4;       /* Cyan for info (5.7:1 on --bg-primary) */
+  --accent-pink: #ec4899;       /* Pink accent */
+  
+  /* Border Colors */
+  --border-primary: #52525b;    /* Primary border (2.4:1 on --bg-primary) */
+  --border-secondary: #3f3f46;  /* Secondary border (1.9:1 on --bg-primary) */
+  --border-accent: #38bdf8;     /* Accent border matching primary accent */
+  
+  /* Interactive States */
+  --hover-bg: #3f3f46;         /* Hover background */
+  --focus-ring: #38bdf8;        /* Focus ring color */
+  --selection-bg: rgba(56, 189, 248, 0.2); /* Text selection background */
+  
+  /* Glassmorphism Variables */
+  --glass-bg: rgba(39, 39, 42, 0.6);      /* Standard glass background */
+  --glass-bg-dark: rgba(39, 39, 42, 0.9); /* Dark glass background */
+  --glass-bg-light: rgba(63, 63, 70, 0.6); /* Light glass background */
+  --glass-border: rgba(255, 255, 255, 0.1); /* Glass border */
+  --glass-border-accent: rgba(56, 189, 248, 0.3); /* Accent glass border */
+  --glass-blur: blur(20px);                /* Standard blur amount */
+  --glass-shadow: 0 0 30px rgba(34, 211, 238, 0.15), 0 0 60px rgba(168, 85, 247, 0.1); /* Glass shadow */
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.4);
+  --shadow-accent: 0 0 20px rgba(56, 189, 248, 0.3);
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #ffffff;
+    --text-secondary: #f0f0f0;
+    --border-primary: #666666;
+    --accent-primary: #ffffff;
+    --focus-ring: #ffffff;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

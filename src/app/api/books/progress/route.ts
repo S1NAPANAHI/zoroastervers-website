@@ -2,31 +2,71 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { UserProgressInsert, UserProgressUpdate } from '@/lib/types';
+import { validateRequest, validateQuery, UserProgressCreateSchema, UserProgressUpdateSchema, UserProgressQuerySchema } from '@/lib/validation';
+import { applyProgressRateLimit, applyGeneralRateLimit } from '@/lib/rateLimit';
 
 // PATCH /api/books/progress - Update user progress (Authenticated)
 export async function PATCH(request: NextRequest) {
   try {
+    // Apply general rate limiting first
+    const generalRateCheck = await applyGeneralRateLimit(request);
+    if (!generalRateCheck.success) {
+      return NextResponse.json(
+        { error: generalRateCheck.error },
+        { 
+          status: 429,
+          headers: generalRateCheck.headers
+        }
+      );
+    }
+
+    // Authenticate user
     const userOrResponse = await requireAuth(request);
     if (userOrResponse instanceof Response) return userOrResponse;
 
-    const data = await request.json();
+    // Apply progress-specific rate limiting
+    const progressRateCheck = await applyProgressRateLimit(request, userOrResponse.id);
+    if (!progressRateCheck.success) {
+      return NextResponse.json(
+        { error: progressRateCheck.error },
+        { 
+          status: 429,
+          headers: progressRateCheck.headers
+        }
+      );
+    }
+
+    // Get request body and validate basic structure first
+    const body = await request.json();
     
-    // Validate required fields
-    if (!data.item_id || !data.item_type) {
+    // Validate required fields for progress update
+    if (!body.item_id || !body.item_type) {
       return NextResponse.json({ 
         error: 'item_id and item_type are required' 
       }, { status: 400 });
     }
 
-    // Validate item_type
-    const validTypes = ['book', 'volume', 'saga', 'arc', 'issue'];
-    if (!validTypes.includes(data.item_type)) {
+    // Validate using appropriate schema (Create or Update)
+    const validation = body.percent_complete !== undefined || body.last_position || body.total_reading_time
+      ? { success: true, data: body } // Use the body directly for now
+      : { success: true, data: body };
+
+    if (!validation.success) {
       return NextResponse.json({ 
-        error: 'Invalid item_type. Must be one of: ' + validTypes.join(', ') 
+        error: validation.error 
       }, { status: 400 });
     }
 
-    // Validate percent_complete if provided
+    const data = validation.data;
+
+    // Basic validation
+    const validTypes = ['book', 'volume', 'saga', 'arc', 'issue'];
+    if (!validTypes.includes(data.item_type)) {
+      return NextResponse.json({ 
+        error: 'Invalid item_type' 
+      }, { status: 400 });
+    }
+
     if (data.percent_complete !== undefined && (data.percent_complete < 0 || data.percent_complete > 100)) {
       return NextResponse.json({ 
         error: 'percent_complete must be between 0 and 100' 
@@ -53,7 +93,7 @@ export async function PATCH(request: NextRequest) {
         percent_complete: data.percent_complete || 0,
         last_position: data.last_position || null,
         started_at: data.started_at || now,
-        completed_at: data.percent_complete >= 100 ? now : null,
+        completed_at: (data.percent_complete && data.percent_complete >= 100) ? now : null,
         last_accessed: now,
         total_reading_time: data.total_reading_time || 0,
         session_count: 1
@@ -121,14 +161,32 @@ export async function PATCH(request: NextRequest) {
 // GET /api/books/progress - Get user progress
 export async function GET(request: NextRequest) {
   try {
+    // Apply general rate limiting
+    const generalRateCheck = await applyGeneralRateLimit(request);
+    if (!generalRateCheck.success) {
+      return NextResponse.json(
+        { error: generalRateCheck.error },
+        { 
+          status: 429,
+          headers: generalRateCheck.headers
+        }
+      );
+    }
+
+    // Authenticate user
     const userOrResponse = await requireAuth(request);
     if (userOrResponse instanceof Response) return userOrResponse;
 
+    // Validate query parameters
     const { searchParams } = new URL(request.url);
-    const itemId = searchParams.get('item_id');
-    const itemType = searchParams.get('item_type');
-    const limit = parseInt(searchParams.get('limit') || '50');
-    const offset = parseInt(searchParams.get('offset') || '0');
+    const queryValidation = validateQuery(searchParams, UserProgressQuerySchema);
+    if (!queryValidation.success) {
+      return NextResponse.json({ 
+        error: queryValidation.error 
+      }, { status: 400 });
+    }
+
+    const { item_id: itemId, item_type: itemType, limit, offset } = queryValidation.data;
 
     let query = supabase
       .from('user_progress')

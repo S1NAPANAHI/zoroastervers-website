@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display, Crimson_Text, EB_Garamond } from 'next/font/google';
-import './globals.css';
-import { AuthProvider } from './contexts/AuthContext';
-import { CartProvider } from './contexts/CartContext';
-import Header from './components/Header';
+import '@styles/globals.css';
+import { AuthProvider } from '@app/contexts/AuthContext';
+import { CartProvider } from '@app/contexts/CartContext';
+import { InlineAdminModeProvider } from '@contexts/InlineAdminModeContext';
+import { ToastProvider } from '@contexts/ToastContext';
+import { Header } from '@components/layout';
+import { InlineAdminEditToggle, AdminDashboardLink } from '@components/features/admin';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -55,8 +58,14 @@ export default function RootLayout({
       >
         <AuthProvider>
           <CartProvider>
-            <Header />
-            {children}
+            <ToastProvider>
+              <InlineAdminModeProvider>
+                <Header />
+                {children}
+                <InlineAdminEditToggle />
+                <AdminDashboardLink />
+              </InlineAdminModeProvider>
+            </ToastProvider>
           </CartProvider>
         </AuthProvider>
       </body>

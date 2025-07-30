@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import RelationshipGraph from '@/components/RelationshipGraph'
+import { RelationshipGraph } from '@components/features/characters'
 import Link from 'next/link'
 
 export default function RelationshipGraphDemo() {

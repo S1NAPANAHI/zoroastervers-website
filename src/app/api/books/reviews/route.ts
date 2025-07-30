@@ -2,36 +2,49 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { ReviewInsert } from '@/lib/types';
+import { validateRequest, validateQuery, ReviewCreateSchema, ReviewQuerySchema, sanitizeHtml } from '@/lib/validation';
+import { applyReviewRateLimit, applyGeneralRateLimit } from '@/lib/rateLimit';
 
 // POST /api/books/reviews - Create a new review (Authenticated)
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting first
+    const generalRateCheck = await applyGeneralRateLimit(request);
+    if (!generalRateCheck.success) {
+      return NextResponse.json(
+        { error: generalRateCheck.error },
+        { 
+          status: 429,
+          headers: generalRateCheck.headers
+        }
+      );
+    }
+
+    // Authenticate user
     const userOrResponse = await requireAuth(request);
     if (userOrResponse instanceof Response) return userOrResponse;
 
-    const data = await request.json();
-    
-    // Validate required fields
-    if (!data.item_id || !data.item_type || !data.rating) {
+    // Apply review-specific rate limiting
+    const reviewRateCheck = await applyReviewRateLimit(request, userOrResponse.id);
+    if (!reviewRateCheck.success) {
+      return NextResponse.json(
+        { error: reviewRateCheck.error },
+        { 
+          status: 429,
+          headers: reviewRateCheck.headers
+        }
+      );
+    }
+
+    // Validate and sanitize input using Zod
+    const validation = await validateRequest(request, ReviewCreateSchema);
+    if (!validation.success) {
       return NextResponse.json({ 
-        error: 'item_id, item_type, and rating are required' 
+        error: validation.error 
       }, { status: 400 });
     }
 
-    // Validate rating range
-    if (data.rating < 1 || data.rating > 5) {
-      return NextResponse.json({ 
-        error: 'Rating must be between 1 and 5' 
-      }, { status: 400 });
-    }
-
-    // Validate item_type
-    const validTypes = ['book', 'volume', 'saga', 'arc', 'issue'];
-    if (!validTypes.includes(data.item_type)) {
-      return NextResponse.json({ 
-        error: 'Invalid item_type. Must be one of: ' + validTypes.join(', ') 
-      }, { status: 400 });
-    }
+    const data = validation.data;
 
     // Check if user has already reviewed this item
     const { data: existingReview, error: checkError } = await supabase
@@ -92,15 +105,33 @@ export async function POST(request: NextRequest) {
 // GET /api/books/reviews - Get reviews with filtering
 export async function GET(request: NextRequest) {
   try {
-    const userOrResponse = await requireAuth(request);
-    if (userOrResponse instanceof Response) return userOrResponse;
+    // Apply general rate limiting
+    const generalRateCheck = await applyGeneralRateLimit(request);
+    if (!generalRateCheck.success) {
+      return NextResponse.json(
+        { error: generalRateCheck.error },
+        { 
+          status: 429,
+          headers: generalRateCheck.headers
+        }
+      );
+    }
 
+    // Note: Reviews are public, so no auth required for reading
+    // But we can optionally get user context for personalization
+    const user = await requireAuth(request);
+    const isAuthenticated = !(user instanceof Response);
+
+    // Validate query parameters
     const { searchParams } = new URL(request.url);
-    const itemId = searchParams.get('item_id');
-    const itemType = searchParams.get('item_type');
-    const userId = searchParams.get('user_id');
-    const limit = parseInt(searchParams.get('limit') || '50');
-    const offset = parseInt(searchParams.get('offset') || '0');
+    const queryValidation = validateQuery(searchParams, ReviewQuerySchema);
+    if (!queryValidation.success) {
+      return NextResponse.json({ 
+        error: queryValidation.error 
+      }, { status: 400 });
+    }
+
+    const { item_id: itemId, item_type: itemType, user_id: userId, limit, offset } = queryValidation.data;
 
     let query = supabase
       .from('reviews')

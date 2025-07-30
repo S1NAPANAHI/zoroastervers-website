@@ -7,7 +7,7 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
   testEnvironment: 'jsdom',
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
@@ -21,11 +21,26 @@ const customJestConfig = {
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@components/(.*)$': '<rootDir>/src/components/$1',
+    '^@lib/(.*)$': '<rootDir>/src/lib/$1',
+    '^@styles/(.*)$': '<rootDir>/src/styles/$1',
+    '^@tests/(.*)$': '<rootDir>/tests/$1',
+    '^@contexts/(.*)$': '<rootDir>/src/contexts/$1',
+    '^@app/(.*)$': '<rootDir>/src/app/$1',
+    '^@types/(.*)$': '<rootDir>/src/types/$1',
+    '^@data/(.*)$': '<rootDir>/src/data/$1',
+    '^@services/(.*)$': '<rootDir>/src/services/$1',
   },
   testMatch: [
-    '<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}',
+    '<rootDir>/tests/**/*.{js,jsx,ts,tsx}',
     '<rootDir>/**/*.(test|spec).{js,jsx,ts,tsx}',
   ],
+  transformIgnorePatterns: [
+    'node_modules/(?!(isows|@mswjs|msw)/)',
+  ],
+  testEnvironmentOptions: {
+    customExportConditions: [''],
+  },
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

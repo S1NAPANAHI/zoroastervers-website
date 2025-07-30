@@ -9,11 +9,11 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Floating particles for enhanced cosmic effect */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0">
-          <div className="absolute w-96 h-96 rounded-full bg-primary-500/10 blur-3xl animate-pulse -top-20 -left-20"></div>
-          <div className="absolute w-64 h-64 rounded-full bg-accent-cyan-500/10 blur-3xl animate-pulse top-1/2 -right-10"></div>
-          <div className="absolute w-80 h-80 rounded-full bg-accent-purple-500/10 blur-3xl animate-pulse -bottom-20 left-1/2"></div>
+      <div className="fixed inset-0 overflow-hidden pointer-events-none animate-fade-in">
+        <div className="absolute inset-0 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <div className="absolute w-96 h-96 rounded-full bg-primary-500/10 blur-3xl animate-pulse -top-20 -left-20 animate-fade-in" style={{ animationDelay: '0.2s' }}></div>
+          <div className="absolute w-64 h-64 rounded-full bg-accent-cyan-500/10 blur-3xl animate-pulse top-1/2 -right-10 animate-fade-in" style={{ animationDelay: '0.3s' }}></div>
+          <div className="absolute w-80 h-80 rounded-full bg-accent-purple-500/10 blur-3xl animate-pulse -bottom-20 left-1/2 animate-fade-in" style={{ animationDelay: '0.4s' }}></div>
         </div>
       </div>
 
@@ -178,9 +178,9 @@ export default function Home() {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              <div className="glass-dark p-4 sm:p-6 rounded-2xl border border-white/20 text-center hover:border-primary-400/30 transition-all group">
-                <div className="text-3xl sm:text-4xl mb-4 group-hover:scale-110 transition-transform">🌌</div>
+            <div className="responsive-grid responsive-grid--3">
+              <div className="glass-dark p-4 sm:p-6 rounded-2xl border border-white/20 text-center hover:border-primary-400/30 smooth-transition hover-lift grid-item scale-expand">
+                <div className="text-3xl sm:text-4xl mb-4 group-hover:scale-110 smooth-transition easter-egg-float">🌌</div>
                 <h3 className="text-lg sm:text-xl font-bold text-secondary-50 mb-3">Universe Explorer</h3>
                 <p className="text-secondary-300 mb-4">
                   Navigate the complete cosmology without spoilers.
@@ -191,8 +191,8 @@ export default function Home() {
                 </Link>
               </div>
               
-              <div className="glass-dark p-6 rounded-2xl border border-white/20 text-center hover:border-accent-purple-400/30 transition-all group">
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">⏰</div>
+              <div className="glass-dark p-6 rounded-2xl border border-white/20 text-center hover:border-accent-purple-400/30 smooth-transition hover-lift grid-item scale-expand" style={{ animationDelay: '0.1s' }}>
+                <div className="text-4xl mb-4 group-hover:scale-110 smooth-transition easter-egg-float">⏰</div>
                 <h3 className="text-xl font-bold text-secondary-50 mb-3">Interactive Timeline</h3>
                 <p className="text-secondary-300 mb-4">
                   Journey through pivotal moments in history.
@@ -203,8 +203,8 @@ export default function Home() {
                 </Link>
               </div>
 
-              <div className="glass-dark p-6 rounded-2xl border border-white/20 text-center hover:border-accent-cyan-400/30 transition-all group">
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">📚</div>
+              <div className="glass-dark p-6 rounded-2xl border border-white/20 text-center hover:border-accent-cyan-400/30 smooth-transition hover-lift grid-item scale-expand" style={{ animationDelay: '0.2s' }}>
+                <div className="text-4xl mb-4 group-hover:scale-110 smooth-transition easter-egg-float">📚</div>
                 <h3 className="text-xl font-bold text-secondary-50 mb-3">Reading Companion</h3>
                 <p className="text-secondary-300 mb-4">
                   Track progress, unlock achievements.

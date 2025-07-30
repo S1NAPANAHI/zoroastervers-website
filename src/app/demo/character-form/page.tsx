@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import CharacterForm from '@/app/components/admin/CharacterForm'
+import { CharacterForm } from '@components/features/admin'
 import { Character } from '@/lib/supabase'
 
 export default function CharacterFormDemo() {
