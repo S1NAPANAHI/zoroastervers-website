@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import useSWR from 'swr';
-import { useCart } from '../app/contexts/CartContext';
+import { useCart } from '@/app/contexts/CartContext'
 import { CartItem } from '@/types/shop';
-import { formatPrice } from '@/utils/pricingService';
-import InlineRating from '../reviews/InlineRating';
-import ReviewPanel from '../reviews/ReviewPanel';
-import EasterEggContainer from '../admin/EasterEggContainer';
+import { formatPrice } from '@/lib/utils';
+import InlineRating from '../../reviews/InlineRating';
+import ReviewPanel from '../../reviews/ReviewPanel';
+import EasterEggContainer from '../../admin/EasterEggContainer';
 import InlineEditableField from '../../ui/InlineEditableField';
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());

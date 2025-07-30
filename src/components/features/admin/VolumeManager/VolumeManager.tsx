@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
-import VolumeModal from './VolumeModal'
+import VolumeModal from '../VolumeModal/VolumeModal'
 
 interface Volume {
   id: number
