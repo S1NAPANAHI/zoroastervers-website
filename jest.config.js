@@ -30,13 +30,14 @@ const customJestConfig = {
     '^@types/(.*)$': '<rootDir>/src/types/$1',
     '^@data/(.*)$': '<rootDir>/src/data/$1',
     '^@services/(.*)$': '<rootDir>/src/services/$1',
+    '^@hooks/(.*)$': '<rootDir>/src/lib/hooks/$1',
   },
   testMatch: [
     '<rootDir>/tests/**/*.{js,jsx,ts,tsx}',
     '<rootDir>/**/*.(test|spec).{js,jsx,ts,tsx}',
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(isows|@mswjs|msw)/)',
+    'node_modules/(?!(isows|@mswjs|msw|react-markdown|@types/hast|unist|vfile|hast|mdast|micromark|remark|rehype)/)',
   ],
   testEnvironmentOptions: {
     customExportConditions: [''],

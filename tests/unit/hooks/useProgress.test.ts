@@ -1,5 +1,5 @@
 import { renderHook, waitFor, act } from '@testing-library/react'
-import { useProgress, useItemProgress } from '@/hooks/useProgress'
+import { useProgress, useItemProgress } from '@/lib/hooks/useProgress'
 
 // Mock SWR
 jest.mock('swr', () => ({

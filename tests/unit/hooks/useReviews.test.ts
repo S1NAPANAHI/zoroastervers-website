@@ -1,5 +1,5 @@
 import { renderHook, waitFor, act } from '@testing-library/react'
-import { useReviews } from '@/hooks/useReviews'
+import { useReviews } from '@/lib/hooks/useReviews'
 
 // Mock SWR
 jest.mock('swr', () => ({
@@ -14,7 +14,7 @@ jest.mock('swr', () => ({
 }))
 
 // Mock the API client
-jest.mock('@/hooks/useDataApi', () => ({
+jest.mock('@/lib/hooks/useDataApi', () => ({
   useDataApi: jest.fn(() => ({
     data: [],
     error: null,
@@ -122,7 +122,7 @@ describe('useReviews', () => {
   })
 
   test('should handle error states', async () => {
-    const { useDataApi } = require('@/hooks/useDataApi')
+    const { useDataApi } = require('@/lib/hooks/useDataApi')
     useDataApi.mockReturnValueOnce({
       data: [],
       error: new Error('Failed to fetch reviews'),

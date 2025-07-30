@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react'
-import { useEasterEggs } from '@/hooks/useEasterEggs'
+import { useEasterEggs } from '@/lib/hooks/useEasterEggs'
 
 describe('useEasterEggs', () => {
   test('should fetch easter eggs for a given item', async () => {
