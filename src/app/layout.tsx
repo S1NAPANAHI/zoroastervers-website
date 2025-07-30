@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from 'next/font/local';
-import { Playfair_Display, Crimson_Text, EB_Garamond } from 'next/font/google';
+import { Playfair_Display, EB_Garamond } from 'next/font/google';
 import '@styles/globals.css';
 import { AuthProvider } from '@app/contexts/AuthContext';
 import { CartProvider } from '@app/contexts/CartContext';
@@ -18,11 +18,30 @@ const geistMono = localFont({
   variable: "--font-geist-mono" 
 });
 
-const crimsonText = Crimson_Text({
+const crimsonText = localFont({
+  src: [
+    {
+      path: '/fonts/crimson-text/CrimsonText-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '/fonts/crimson-text/CrimsonText-SemiBold.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '/fonts/crimson-text/CrimsonText-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '/fonts/crimson-text/CrimsonText-Italic.woff2',
+      weight: '400',
+      style: 'italic',
+    },
+  ],
   variable: "--font-crimson-text",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  style: ["normal", "italic"],
   display: "swap",
 });
 
