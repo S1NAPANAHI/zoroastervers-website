@@ -36,8 +36,8 @@ export const ReviewQuerySchema = z.object({
   item_id: z.string().regex(/^\d+$/, 'Invalid item_id').transform(Number).optional(),
   item_type: ItemTypeSchema.optional(),
   user_id: UuidSchema.optional(),
-limit: z.string().regex(/^\\d+$/, 'Invalid limit').transform((val) =\u003e parseInt(val, 10)).min(1).max(100).optional().default(50),
-offset: z.string().regex(/^\\d+$/, 'Invalid offset').transform((val) =\u003e parseInt(val, 10)).min(0).optional().default(0),
+  limit: z.string().regex(/^\d+$/, 'Invalid limit').transform(Number).min(1).max(100).optional().default(50),
+  offset: z.string().regex(/^\d+$/, 'Invalid offset').transform(Number).min(0).optional().default(0),
 });
 
 // =====================================================
@@ -67,8 +67,8 @@ export const UserProgressQuerySchema = z.object({
   item_id: z.string().regex(/^\d+$/, 'Invalid item_id').transform(Number).optional(),
   item_type: ItemTypeSchema.optional(),
   user_id: UuidSchema.optional(),
-limit: z.string().regex(/^\\d+$/, 'Invalid limit').transform((val) =\u003e parseInt(val, 10)).min(1).max(100).optional().default(50),
-offset: z.string().regex(/^\\d+$/, 'Invalid offset').transform((val) =\u003e parseInt(val, 10)).min(0).optional().default(0),
+  limit: z.string().regex(/^\d+$/, 'Invalid limit').transform(Number).min(1).max(100).optional().default(50),
+  offset: z.string().regex(/^\d+$/, 'Invalid offset').transform(Number).min(0).optional().default(0),
 });
 
 // =====================================================
@@ -226,3 +226,4 @@ export type CharacterUpdateInput = z.infer<typeof CharacterUpdateSchema>;
 export type ContentCreateInput = z.infer<typeof ContentCreateSchema>;
 export type ContentUpdateInput = z.infer<typeof ContentUpdateSchema>;
 export type EasterEggCreateInput = z.infer<typeof EasterEggCreateSchema>;
+
