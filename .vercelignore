@@ -1,0 +1,19 @@
+# Exclude Storybook from production builds
+.storybook/
+stories/
+**/*.stories.*
+**/*.story.*
+
+# Development files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
