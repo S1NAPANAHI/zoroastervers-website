@@ -36,8 +36,8 @@ export const ReviewQuerySchema = z.object({
   item_id: z.string().regex(/^\d+$/, 'Invalid item_id').transform(Number).optional(),
   item_type: ItemTypeSchema.optional(),
   user_id: UuidSchema.optional(),
-  limit: z.string().regex(/^\d+$/, 'Invalid limit').transform(Number).min(1).max(100).optional().default('50'),
-  offset: z.string().regex(/^\d+$/, 'Invalid offset').transform(Number).min(0).optional().default('0'),
+  limit: z.string().regex(/^\d+$/, 'Invalid limit').transform(Number).refine(val => val >= 1 && val <= 100, { message: 'Limit must be between 1 and 100' }).optional().default('50'),
+  offset: z.string().regex(/^\d+$/, 'Invalid offset').transform(Number).refine(val => val >= 0, { message: 'Offset must be non-negative' }).optional().default('0'),
 });
 
 // =====================================================
@@ -67,8 +67,8 @@ export const UserProgressQuerySchema = z.object({
   item_id: z.string().regex(/^\d+$/, 'Invalid item_id').transform(Number).optional(),
   item_type: ItemTypeSchema.optional(),
   user_id: UuidSchema.optional(),
-  limit: z.string().regex(/^\d+$/, 'Invalid limit').transform(Number).min(1).max(100).optional().default('50'),
-  offset: z.string().regex(/^\d+$/, 'Invalid offset').transform(Number).min(0).optional().default('0'),
+  limit: z.string().regex(/^\d+$/, 'Invalid limit').transform(Number).refine(val => val >= 1 && val <= 100, { message: 'Limit must be between 1 and 100' }).optional().default('50'),
+  offset: z.string().regex(/^\d+$/, 'Invalid offset').transform(Number).refine(val => val >= 0, { message: 'Offset must be non-negative' }).optional().default('0'),
 });
 
 // =====================================================
