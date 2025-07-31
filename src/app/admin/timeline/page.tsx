@@ -8,7 +8,7 @@ import Link from 'next/link';
 const AdminTimeline: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
-  const [timelineEvents, setTimelineEvents] = useState([]);
+  const [timelineEvents, setTimelineEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const AdminTimeline: React.FC = () => {
       .catch(err => console.error('Error fetching timeline events:', err));
   }, [isAuthenticated, user, router]);
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     if (confirm('Are you sure you want to delete this event?')) {
       fetch(`/api/admin/timeline?id=${id}`, { method: 'DELETE' })
         .then(res => res.json())

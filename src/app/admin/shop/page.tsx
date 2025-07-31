@@ -8,7 +8,7 @@ import Link from 'next/link';
 const AdminShop: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
-  const [shopItems, setShopItems] = useState([]);
+  const [shopItems, setShopItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

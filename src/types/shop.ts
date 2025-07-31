@@ -84,6 +84,11 @@ export interface TreeNode {
   isExpanded?: boolean;
   description: string;
   coverImage: string;
+  content?: string;
+  status?: 'published' | 'pre-order' | 'coming-soon' | 'draft';
+  orderIndex?: number;
+  createdAt?: string;
+  updatedAt?: string;
   savings?: number;
   bundleInfo?: {
     individualPrice: number;
@@ -127,6 +132,18 @@ export interface BundleRecommendation {
   originalPrice: number;
   type: 'arc' | 'saga' | 'volume' | 'book';
   items: string[];
+}
+
+export interface ShopData {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  type: 'book' | 'volume' | 'saga' | 'arc' | 'issue';
+  coverImage: string;
+  status: 'published' | 'pre-order' | 'coming-soon' | 'draft';
+  releaseDate: string;
+  volumes?: any[];
 }
 
 export type ViewMode = 'tree' | 'grid' | 'list';

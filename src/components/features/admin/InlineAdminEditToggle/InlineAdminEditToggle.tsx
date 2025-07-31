@@ -3,7 +3,7 @@
 import React from 'react';
 import { PencilIcon, EyeIcon } from '@heroicons/react/24/outline';
 import { useInlineAdminMode } from '@/contexts/InlineAdminModeContext';
-import { useAuth } from '@app/contexts/AuthContext';
+import { useAuth } from '../../../../app/contexts/AuthContext';
 
 export default function InlineAdminEditToggle() {
   const { user } = useAuth();

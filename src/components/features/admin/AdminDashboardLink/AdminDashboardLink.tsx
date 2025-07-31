@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { useInlineAdminMode } from '@/contexts/InlineAdminModeContext';
-import { useAuth } from '@app/contexts/AuthContext';
+import { useAuth } from '../../../../app/contexts/AuthContext';
 
 export default function AdminDashboardLink() {
   const { user } = useAuth();

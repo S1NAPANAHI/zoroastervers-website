@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@app/contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '@app/contexts/CartContext';
 import {
   HierarchicalShopTree,

@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Character } from '@/lib/supabase'
-import { RelationshipGraph } from '@components/features/characters'
+import { Character } from '../../../../lib/supabase'
+import { RelationshipGraph } from '../../../../components/features/characters'
 import { ArrowLeftIcon, MagnifyingGlassIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 

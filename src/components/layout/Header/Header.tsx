@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@app/contexts/AuthContext';
+import { useAuth } from '../../../app/contexts/AuthContext';
 import { useCart } from '@app/contexts/CartContext';
 
 interface TimeLeft {

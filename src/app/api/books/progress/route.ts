@@ -2,21 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { UserProgressInsert, UserProgressUpdate } from '@/lib/types';
-import { validateRequest, validateQuery, UserProgressCreateSchema, UserProgressUpdateSchema, UserProgressQuerySchema } from '@/lib/validation';
+import { validateRequest, validateQuery, UserProgressCreateSchema, UserProgressUpdateSchema, UserProgressQuerySchema } from '@/lib/validations';
 import { applyProgressRateLimit, applyGeneralRateLimit } from '@/lib/rateLimit';
 
 // PATCH /api/books/progress - Update user progress (Authenticated)
 export async function PATCH(request: NextRequest) {
   try {
     // Apply general rate limiting first
-    const generalRateCheck = await applyGeneralRateLimit(request);
-    if (!generalRateCheck.success) {
+    const generalRateCheck = applyGeneralRateLimit();
+    if (!generalRateCheck) {
       return NextResponse.json(
-        { error: generalRateCheck.error },
-        { 
-          status: 429,
-          headers: generalRateCheck.headers
-        }
+        { error: 'Rate limit exceeded' },
+        { status: 429 }
       );
     }
 
@@ -25,14 +22,11 @@ export async function PATCH(request: NextRequest) {
     if (userOrResponse instanceof Response) return userOrResponse;
 
     // Apply progress-specific rate limiting
-    const progressRateCheck = await applyProgressRateLimit(request, userOrResponse.id);
-    if (!progressRateCheck.success) {
+    const progressRateCheck = applyProgressRateLimit();
+    if (!progressRateCheck) {
       return NextResponse.json(
-        { error: progressRateCheck.error },
-        { 
-          status: 429,
-          headers: progressRateCheck.headers
-        }
+        { error: 'Progress rate limit exceeded' },
+        { status: 429 }
       );
     }
 
@@ -46,18 +40,8 @@ export async function PATCH(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Validate using appropriate schema (Create or Update)
-    const validation = body.percent_complete !== undefined || body.last_position || body.total_reading_time
-      ? { success: true, data: body } // Use the body directly for now
-      : { success: true, data: body };
-
-    if (!validation.success) {
-      return NextResponse.json({ 
-        error: validation.error 
-      }, { status: 400 });
-    }
-
-    const data = validation.data;
+    // Use the body directly for now (validation schemas are placeholders)
+    const data = body;
 
     // Basic validation
     const validTypes = ['book', 'volume', 'saga', 'arc', 'issue'];
@@ -91,9 +75,9 @@ export async function PATCH(request: NextRequest) {
         item_id: data.item_id,
         item_type: data.item_type,
         percent_complete: data.percent_complete || 0,
-        last_position: data.last_position || null,
+        last_position: data.last_position || undefined,
         started_at: data.started_at || now,
-        completed_at: (data.percent_complete && data.percent_complete >= 100) ? now : null,
+        completed_at: (data.percent_complete && data.percent_complete >= 100) ? now : undefined,
         last_accessed: now,
         total_reading_time: data.total_reading_time || 0,
         session_count: 1
@@ -162,14 +146,11 @@ export async function PATCH(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // Apply general rate limiting
-    const generalRateCheck = await applyGeneralRateLimit(request);
-    if (!generalRateCheck.success) {
+    const generalRateCheck = applyGeneralRateLimit();
+    if (!generalRateCheck) {
       return NextResponse.json(
-        { error: generalRateCheck.error },
-        { 
-          status: 429,
-          headers: generalRateCheck.headers
-        }
+        { error: 'Rate limit exceeded' },
+        { status: 429 }
       );
     }
 
