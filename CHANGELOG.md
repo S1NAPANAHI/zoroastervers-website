@@ -20,8 +20,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added placeholder validation functions in `src/lib/validation.ts`
   - Ensured all imports have corresponding implementations
 
+- **Critical Schema Validation**: Fixed fatal Zod validation error causing build failures
+  - Resolved "min is not a function" TypeError in production builds
+  - Fixed invalid `.regex().transform().min()` chain in ReviewQuerySchema and UserProgressQuerySchema
+  - Replaced problematic method chaining with `.refine()` for post-transform validation
+  - Query parameter validation now works correctly for limit/offset parameters
+
 - **Build Status**: ✅ Build now passes successfully
   - Resolved all "does not contain a default export" errors in Vercel deployment
+  - Fixed critical Zod schema validation errors preventing successful deployment
   - All TypeScript compilation issues resolved
   - Static generation and optimization working correctly
 
