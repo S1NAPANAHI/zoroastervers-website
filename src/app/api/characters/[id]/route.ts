@@ -82,8 +82,11 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Character not found' }, { status: 404 })
     }
 
+    // Type assertion since we've confirmed character is not null
+    const typedCharacter = character as Character & any
+
     // If timeline is requested, fetch appearance timeline data
-    let appearanceTimeline = []
+    let appearanceTimeline: any[] = []
     if (includeTimeline) {
       try {
         // This is a mock implementation - in a real app you'd have character_appearances table
@@ -147,7 +150,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
 
     const response = {
-      ...character,
+      ...typedCharacter,
       appearance_timeline: includeTimeline ? appearanceTimeline : undefined
     }
 
@@ -251,7 +254,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     const characterId = parseInt(params.id);
 
     const { error } = await adminDb
-      .from<Character>('characters')
+      .from('characters')
       .delete()
       .eq('id', characterId);
 

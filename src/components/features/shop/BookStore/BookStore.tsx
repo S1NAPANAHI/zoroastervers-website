@@ -70,7 +70,7 @@ export default function BookStore() {
 const handleAddToCart = (bookIndex: number) => {
     const book = books[bookIndex];
     const selectedType = selectedFormat[bookIndex] || book.formats[0].type;
-    const format = book.formats.find(f => f.type === selectedType);
+    const format = book.formats.find((f: any) => f.type === selectedType);
     const cartItem: CartItem = {
       id: book.id,
       type: 'book',
@@ -89,7 +89,7 @@ const handleAddToCart = (bookIndex: number) => {
         📚 Buy My Books
       </h2>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {books.map((book, index) => (
+        {books.map((book: any, index: number) => (
           <div key={index} className="glass p-6 glow-card hover:scale-105 transition-all duration-300">
             {/* Book Cover with Easter Eggs */}
             <EasterEggContainer
@@ -141,7 +141,7 @@ const handleAddToCart = (bookIndex: number) => {
             <div className="mb-4">
               <p className="text-[#dcddde] text-sm font-medium mb-2">Format:</p>
               <div className="flex flex-wrap gap-2">
-                {book.formats.map((format, formatIndex) => (
+                {book.formats.map((format: any, formatIndex: number) => (
                   <button
                     key={formatIndex}
                     onClick={() => handleFormatSelect(index, format.type)}
@@ -160,7 +160,7 @@ const handleAddToCart = (bookIndex: number) => {
             {/* Price and Buy Button */}
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-[#a855f7]">
-                {formatPrice(books[index].formats.find(f => f.type === (selectedFormat[index] || books[index].formats[0].type))?.price || books[index].formats[0].price)}
+                {formatPrice(books[index].formats.find((f: any) => f.type === (selectedFormat[index] || books[index].formats[0].type))?.price || books[index].formats[0].price)}
               </span>
               <button
                 onClick={() => handleAddToCart(index)}
@@ -204,7 +204,7 @@ const handleAddToCart = (bookIndex: number) => {
       {reviewModalOpen && (
         <ReviewPanel 
           itemId={reviewModalOpen.itemId} 
-          itemType={reviewModalOpen.itemType} 
+          itemType={reviewModalOpen.itemType as 'book' | 'volume' | 'saga' | 'arc' | 'issue'} 
           itemTitle={reviewModalOpen.itemTitle} 
           onClose={() => setReviewModalOpen(null)} 
         />

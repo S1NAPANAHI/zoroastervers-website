@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Review } from '@/lib/types';
+import { Review, ReviewWithUser } from '@/lib/types';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { reviewsApi } from '@/lib/hooks/useReviews';
 import { StarRating } from '../StarRating';
 import { ReviewForm } from '../ReviewForm';
 
 interface ReviewListProps {
-  reviews: Review[];
+  reviews: ReviewWithUser[];
   onReviewUpdate: () => void;
   className?: string;
 }

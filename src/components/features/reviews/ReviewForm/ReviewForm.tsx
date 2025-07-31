@@ -30,7 +30,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ itemId, itemType, onSuccess }) 
 
   const onSubmit = async (data: ReviewFormData) => {
     try {
-      await reviewsApi.create({ ...data, item_id: itemId, item_type: itemType });
+      await reviewsApi.create({ ...data, item_id: itemId, item_type: itemType, user_id: 'current_user_id' }); // Consider removing user_id after ensuring authentication is handled properly elsewhere.
       onSuccess();
     } catch (error) {
       console.error('Error submitting review:', error);

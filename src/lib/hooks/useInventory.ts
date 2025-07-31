@@ -65,12 +65,12 @@ export interface InventoryStats {
 }
 
 // Hierarchical inventory item with children
-export interface HierarchicalInventoryItem extends InventoryItem {
+export type HierarchicalInventoryItem = InventoryItem & {
   children?: HierarchicalInventoryItem[];
   parent?: HierarchicalInventoryItem;
   depth: number;
   hasChildren: boolean;
-}
+};
 
 // Custom fetcher for inventory with hierarchy support
 const createInventoryFetcher = (options?: InventoryHookOptions) => {
@@ -270,7 +270,7 @@ export function useInventory(options?: InventoryHookOptions) {
       {
         optimisticData: (current) => 
           current.map(item => 
-            item.id === id ? { ...item, ...itemData, updated_at: new Date().toISOString() } : item
+            item.id === id ? { ...item, ...itemData, updated_at: new Date().toISOString() } as InventoryItem : item
           ),
         rollbackOnError: true,
       }
@@ -313,7 +313,7 @@ export function useInventory(options?: InventoryHookOptions) {
           const updateMap = new Map(updates.map(u => [u.id, u.data]));
           return current.map(item => {
             const update = updateMap.get(item.id);
-            return update ? { ...item, ...update, updated_at: new Date().toISOString() } : item;
+            return update ? { ...item, ...update, updated_at: new Date().toISOString() } as InventoryItem : item;
           });
         },
         rollbackOnError: true,
@@ -390,7 +390,8 @@ export function useInventoryItem(itemType: ItemType, id: number) {
   const fetcher = useCallback(async () => {
     const endpoint = getApiEndpoint(itemType, id);
     const response = await apiClient.get<InventoryItem>(endpoint);
-    return [response.data]; // Return as array for consistency with useDataApi
+    // Return as array for consistency with useDataApi, but ensure it's a single item
+    return Array.isArray(response.data) ? response.data : [response.data];
   }, [itemType, id]);
 
   const { data, error, isLoading, mutate, optimisticUpdate } = useDataApi<InventoryItem>(
@@ -407,7 +408,7 @@ export function useInventoryItem(itemType: ItemType, id: number) {
     return optimisticUpdate(
       () => inventoryApi.update(itemType, id, itemData),
       {
-        optimisticData: [{ ...item, ...itemData, updated_at: new Date().toISOString() }],
+        optimisticData: [{ ...item, ...itemData, updated_at: new Date().toISOString() } as InventoryItem],
         rollbackOnError: true,
       }
     );
@@ -497,10 +498,4 @@ function buildHierarchy(items: InventoryItem[]): HierarchicalInventoryItem[] {
   return roots;
 }
 
-// Export types and utilities
-export type {
-  InventoryFilterOptions,
-  InventoryHookOptions,
-  InventoryStats,
-  HierarchicalInventoryItem,
-};
+// All types are already exported above with their declarations

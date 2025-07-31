@@ -20,43 +20,16 @@ import {
 } from '@headlessui/react'
 import { Fragment } from 'react'
 import { CharacterModal } from '@/components/features/admin/CharacterModal'
+import { Character as BaseCharacter } from '@/lib/supabase'
 
-interface Character {
-  id: number
-  name: string
-  aliases?: string[]
-  description?: string
-  appearance?: string
-  height?: string
-  weight?: string
-  eye_color?: string
-  hair_color?: string
-  age_range?: string
-  personality?: string
-  skills?: string[]
-  abilities?: string[]
-  weaknesses?: string[]
-  motivations?: string
-  fears?: string
-  avatar_url?: string
-  images?: any
-  status: 'active' | 'inactive' | 'deceased' | 'missing' | 'unknown'
-  importance_level: number
-  is_main_character: boolean
-  is_protagonist: boolean
-  is_antagonist: boolean
-  universe_id?: number
-  series_id?: number
-  season_id?: number
-  work_id?: number
-  first_appearance?: string
-  creator?: string
-  voice_actor?: string
-  tags?: string[]
-  created_at: string
-  updated_at: string
-  created_by?: string
-  updated_by?: string
+// Extend the base Character interface with additional properties used in this component
+interface Character extends BaseCharacter {
+  // Additional properties used in the component
+  role?: string
+  species?: string
+  importance?: string
+  age?: string
+  location?: string
   character_relationships?: Array<{
     id: number
     related_character_id: number
@@ -76,7 +49,6 @@ const statusOptions = [
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   { value: 'deceased', label: 'Deceased' },
-  { value: 'missing', label: 'Missing' },
   { value: 'unknown', label: 'Unknown' }
 ]
 
@@ -149,7 +121,7 @@ export default function CharacterManager() {
     }
   )
   
-  const characters = charactersData || []
+  const characters: Character[] = charactersData || []
   
   // Delete handler with optimistic updates
   const handleDelete = useCallback(async (id: number) => {
@@ -261,7 +233,7 @@ export default function CharacterManager() {
   }
   
   // Get unique tags from all characters for filter
-  const allTags = [...new Set(characters.flatMap((char: Character) => char.tags || []))]
+  const allTags: string[] = [...new Set(characters.flatMap((char: Character) => char.tags || []))]
   
   // Filter characters based on current filters
   const filteredCharacters = characters.filter((character: Character) => {
@@ -567,15 +539,15 @@ export default function CharacterManager() {
                       onChange={e => handleStatusChange(character.id, e.target.value)}
                       className={`px-2 py-1 rounded text-white text-sm ${getStatusColor(character.status)}`}
                     >
-                      <option value="alive">Alive</option>
-                      <option value="dead">Dead</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                      <option value="deceased">Deceased</option>
                       <option value="unknown">Unknown</option>
-                      <option value="missing">Missing</option>
                     </select>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getImportanceColor(character.importance)}`}>
-                      {character.importance.charAt(0).toUpperCase() + character.importance.slice(1)}
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${getImportanceColor(character.importance_level, character.is_main_character, character.is_protagonist, character.is_antagonist)}`}>
+                      {getImportanceLabel(character)}
                     </span>
                   </td>
                   <td className="px-6 py-4">
@@ -624,7 +596,7 @@ export default function CharacterManager() {
           onClose={() => setShowModal(false)}
           onSave={() => {
             setShowModal(false)
-            fetchCharacters()
+            mutate()
           }}
         />
       )}

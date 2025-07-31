@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import { fetchAvailableRoutes, chooseRoute } from '../services/routeService';
+import { fetchAvailableRoutes, chooseRoute } from '../../../../services/routeService';
 
 // Dynamically import ForceGraph2D to avoid SSR issues
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
@@ -43,7 +43,7 @@ const RouteMap: React.FC<RouteMapProps> = ({
   onRouteSelected, 
   className = '' 
 }) => {
-  const fgRef = useRef<any>();
+  const fgRef = useRef<any>(null);
   const [routes, setRoutes] = useState<RouteNode[]>([]);
   const [links, setLinks] = useState<RouteLink[]>([]);
   const [selectedNode, setSelectedNode] = useState<RouteNode | null>(null);
@@ -164,46 +164,47 @@ const RouteMap: React.FC<RouteMapProps> = ({
         <ForceGraph2D
           ref={fgRef}
           graphData={{ nodes: routes, links }}
-          nodeColor={getNodeColor}
-          linkColor={getLinkColor}
+          nodeColor={(node: any) => getNodeColor(node as RouteNode)}
+          linkColor={(link: any) => getLinkColor(link as RouteLink)}
           nodeRelSize={8}
           linkWidth={2}
-          nodeCanvasObject={(node: RouteNode, ctx, globalScale) => {
-            const label = node.title;
+          nodeCanvasObject={(node: any, ctx: any, globalScale: number) => {
+            const routeNode = node as RouteNode;
+            const label = routeNode.title;
             const fontSize = Math.max(10, 14 / globalScale);
             const radius = 20;
             
             // Draw node circle
             ctx.beginPath();
-            ctx.arc(node.x!, node.y!, radius, 0, 2 * Math.PI);
-            ctx.fillStyle = getNodeColor(node);
+            ctx.arc(routeNode.x!, routeNode.y!, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = getNodeColor(routeNode);
             ctx.fill();
             
             // Draw border for current route
-            if (node.is_current) {
+            if (routeNode.is_current) {
               ctx.strokeStyle = '#059669';
               ctx.lineWidth = 3;
               ctx.stroke();
             }
             
             // Draw lock icon for locked routes
-            if (!node.is_unlocked) {
+            if (!routeNode.is_unlocked) {
               ctx.fillStyle = '#ffffff';
               ctx.font = `${fontSize}px Arial`;
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              ctx.fillText('🔒', node.x!, node.y!);
+              ctx.fillText('🔒', routeNode.x!, routeNode.y!);
             }
             
             // Draw label
-            ctx.fillStyle = node.is_unlocked ? '#1f2937' : '#6b7280';
+            ctx.fillStyle = routeNode.is_unlocked ? '#1f2937' : '#6b7280';
             ctx.font = `${fontSize}px Sans-Serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
-            ctx.fillText(label, node.x!, node.y! + radius + 5);
+            ctx.fillText(label, routeNode.x!, routeNode.y! + radius + 5);
           }}
-          onNodeClick={handleNodeClick}
-          onNodeHover={handleNodeHover}
+          onNodeClick={(node: any) => handleNodeClick(node as RouteNode)}
+          onNodeHover={(node: any) => handleNodeHover(node as RouteNode)}
           cooldownTicks={100}
           d3AlphaDecay={0.01}
           d3VelocityDecay={0.3}

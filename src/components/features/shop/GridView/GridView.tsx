@@ -159,7 +159,7 @@ const GridView: React.FC<GridViewProps> = ({ data, onAddToCart, onViewDetails })
       {reviewModalOpen && (
         <ReviewPanel 
           itemId={reviewModalOpen.itemId} 
-          itemType={reviewModalOpen.itemType} 
+          itemType={reviewModalOpen.itemType as 'book' | 'volume' | 'saga' | 'arc' | 'issue'} 
           itemTitle={reviewModalOpen.itemTitle} 
           onClose={() => setReviewModalOpen(null)} 
         />

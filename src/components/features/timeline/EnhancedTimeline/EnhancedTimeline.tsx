@@ -60,7 +60,7 @@ const EnhancedTimeline: React.FC = () => {
       'infinite-possibilities': 'With all realms unified and crystal technology reaching its full potential, the future became truly limitless. New frontiers opened up as explorers could now travel not just between the former realms, but to entirely new dimensions and realities. The Infinite Age had begun, where every dream could potentially become reality through the harmonious combination of crystal power, unified knowledge, and boundless imagination.'
     };
     
-    return descriptions[eventId] || shortDescription + ' This pivotal moment in history shaped the future of all realms and continues to influence events to this day.';
+    return descriptions[eventId as keyof typeof descriptions] || shortDescription + ' This pivotal moment in history shaped the future of all realms and continues to influence events to this day.';
   };
 
   // Helper function to get related books for purchase
@@ -93,7 +93,7 @@ const EnhancedTimeline: React.FC = () => {
       }
     };
 
-    const book = bookData[bookId];
+    const book = bookData[bookId as keyof typeof bookData];
     if (!book) return [];
 
     return [{
@@ -117,7 +117,7 @@ const EnhancedTimeline: React.FC = () => {
       'book5': ['Chapter 7: Final Battle', 'Chapter 14: New Beginning', 'Chapter 21: Infinite Dawn']
     };
     
-    return chapters[bookId] || [];
+    return chapters[bookId as keyof typeof chapters] || [];
   };
 
   // Helper function to get consequences for events
@@ -200,7 +200,7 @@ const EnhancedTimeline: React.FC = () => {
       ]
     };
     
-    return consequences[eventId] || [
+    return consequences[eventId as keyof typeof consequences] || [
       'This event reshaped the political landscape of all affected realms',
       'Long-term cultural and social changes emerged from this pivotal moment',
       'The balance of power shifted significantly following these developments'

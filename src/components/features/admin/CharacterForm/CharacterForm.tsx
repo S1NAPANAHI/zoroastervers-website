@@ -50,11 +50,11 @@ const characterSchema = z.object({
   })).optional(),
   
   // Status & Metadata
-  status: z.enum(['active', 'inactive', 'deceased', 'unknown']).default('active'),
-  importance_level: z.number().min(1).max(10).default(5),
-  is_main_character: z.boolean().default(false),
-  is_protagonist: z.boolean().default(false),
-  is_antagonist: z.boolean().default(false),
+  status: z.enum(['active', 'inactive', 'deceased', 'unknown']),
+  importance_level: z.number().min(1).max(10),
+  is_main_character: z.boolean(),
+  is_protagonist: z.boolean(),
+  is_antagonist: z.boolean(),
 })
 
 type CharacterFormData = z.infer<typeof characterSchema>
@@ -187,15 +187,17 @@ export default function CharacterForm({ character, onClose, onSave, availableCha
       })
 
       if (response.ok) {
-        // Save tag assignments
-        fetch('/api/character-tags/assignments', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            character_id: character.id,
-            tag_ids: selectedTags.map(tag => tag.id)
-          })
-        }).catch(console.error)
+        // Save tag assignments (only if editing existing character)
+        if (character?.id) {
+          fetch('/api/character-tags/assignments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              character_id: character.id,
+              tag_ids: selectedTags.map(tag => tag.id)
+            })
+          }).catch(console.error)
+        }
 
         onSave()
       } else {

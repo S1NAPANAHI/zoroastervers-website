@@ -9,8 +9,8 @@ import { applyProgressRateLimit, applyGeneralRateLimit } from '@/lib/rateLimit';
 export async function PATCH(request: NextRequest) {
   try {
     // Apply general rate limiting first
-    const generalRateCheck = applyGeneralRateLimit();
-    if (!generalRateCheck) {
+    const generalRateCheck = await applyGeneralRateLimit(request);
+    if (!generalRateCheck.success) {
       return NextResponse.json(
         { error: 'Rate limit exceeded' },
         { status: 429 }
@@ -22,8 +22,8 @@ export async function PATCH(request: NextRequest) {
     if (userOrResponse instanceof Response) return userOrResponse;
 
     // Apply progress-specific rate limiting
-    const progressRateCheck = applyProgressRateLimit();
-    if (!progressRateCheck) {
+    const progressRateCheck = await applyProgressRateLimit(request);
+    if (!progressRateCheck.success) {
       return NextResponse.json(
         { error: 'Progress rate limit exceeded' },
         { status: 429 }
@@ -146,8 +146,8 @@ export async function PATCH(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // Apply general rate limiting
-    const generalRateCheck = applyGeneralRateLimit();
-    if (!generalRateCheck) {
+    const generalRateCheck = await applyGeneralRateLimit(request);
+    if (!generalRateCheck.success) {
       return NextResponse.json(
         { error: 'Rate limit exceeded' },
         { status: 429 }

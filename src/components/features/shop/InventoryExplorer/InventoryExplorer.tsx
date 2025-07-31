@@ -47,13 +47,13 @@ const InventoryExplorer: React.FC<InventoryExplorerProps> = ({ initialData }) =>
       {/* Renderer */}
       {viewMode === 'tree' ? (
         <HierarchicalShopTree
-          data={displayData}
+          data={displayData as TreeNode[]}
           onAddToCart={handleAddToCart}
           onViewDetails={handleViewDetails}
         />
       ) : (
         <GridView
-          data={displayData}
+          data={displayData as TreeNode[]}
           onAddToCart={handleAddToCart}
           onViewDetails={handleViewDetails}
         />

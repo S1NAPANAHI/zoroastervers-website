@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { ReviewInsert } from '@/lib/types';
-import { validateRequest, validateQuery, ReviewCreateSchema, ReviewQuerySchema, sanitizeHtml } from '@/lib/validation';
+import { validateRequest, validateQuery, ReviewCreateSchema, ReviewQuerySchema, sanitizeHtml } from '@/lib/validations';
 import { applyReviewRateLimit, applyGeneralRateLimit } from '@/lib/rateLimit';
 
 // POST /api/books/reviews - Create a new review (Authenticated)
@@ -12,11 +12,8 @@ export async function POST(request: NextRequest) {
     const generalRateCheck = await applyGeneralRateLimit(request);
     if (!generalRateCheck.success) {
       return NextResponse.json(
-        { error: generalRateCheck.error },
-        { 
-          status: 429,
-          headers: generalRateCheck.headers
-        }
+        { error: 'Rate limit exceeded' },
+        { status: 429 }
       );
     }
 
@@ -25,14 +22,11 @@ export async function POST(request: NextRequest) {
     if (userOrResponse instanceof Response) return userOrResponse;
 
     // Apply review-specific rate limiting
-    const reviewRateCheck = await applyReviewRateLimit(request, userOrResponse.id);
+    const reviewRateCheck = await applyReviewRateLimit(request);
     if (!reviewRateCheck.success) {
       return NextResponse.json(
-        { error: reviewRateCheck.error },
-        { 
-          status: 429,
-          headers: reviewRateCheck.headers
-        }
+        { error: 'Review rate limit exceeded' },
+        { status: 429 }
       );
     }
 
@@ -72,7 +66,7 @@ export async function POST(request: NextRequest) {
       item_id: data.item_id,
       item_type: data.item_type,
       rating: data.rating,
-      comment: data.comment || null,
+      comment: data.comment || undefined,
       is_verified_purchase: data.is_verified_purchase || false,
       is_spoiler: data.is_spoiler || false,
       helpful_count: 0
@@ -109,11 +103,8 @@ export async function GET(request: NextRequest) {
     const generalRateCheck = await applyGeneralRateLimit(request);
     if (!generalRateCheck.success) {
       return NextResponse.json(
-        { error: generalRateCheck.error },
-        { 
-          status: 429,
-          headers: generalRateCheck.headers
-        }
+        { error: 'Rate limit exceeded' },
+        { status: 429 }
       );
     }
 

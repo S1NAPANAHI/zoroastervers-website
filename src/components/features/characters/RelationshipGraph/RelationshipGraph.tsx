@@ -44,7 +44,7 @@ const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
   onCreateRelationship,
   editable = false
 }) => {
-  const graphRef = useRef<any>();
+  const graphRef = useRef<any>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [sourceNode, setSourceNode] = useState<CharacterNode | null>(null);
 
@@ -68,7 +68,7 @@ const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
     )
   };
 
-  const getNodeColor = useCallback((node: CharacterNode) => {
+  const getNodeColor = useCallback((node: any) => {
     switch (node.type) {
       case 'protagonist': return '#ff6b6b';
       case 'antagonist': return '#ee5a24';
@@ -77,11 +77,11 @@ const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
     }
   }, []);
 
-  const getNodeSize = useCallback((node: CharacterNode) => {
+  const getNodeSize = useCallback((node: any) => {
     return Math.max(8, (node.importance || 5) * 2);
   }, []);
 
-  const getLinkColor = useCallback((link: RelationshipLink) => {
+  const getLinkColor = useCallback((link: any) => {
     switch (link.relationship_type) {
       case 'family': return '#ff4757';
       case 'friend': return '#2ed573';
@@ -188,7 +188,7 @@ const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
         onNodeClick={handleNodeClick}
         onNodeDrag={handleNodeDrag}
         enableNodeDrag={true}
-        enableZoomPanInteraction={true}
+        enableZoomInteraction={true}
         cooldownTicks={100}
         nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
           const label = node.name;
@@ -198,7 +198,7 @@ const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
           const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
 
           ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-          ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
+          ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, bckgDimensions[0], bckgDimensions[1]);
 
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
@@ -211,7 +211,7 @@ const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
           ctx.fillStyle = color;
           const bckgDimensions = node.__bckgDimensions;
           bckgDimensions &&
-            ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
+            ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, bckgDimensions[0], bckgDimensions[1]);
         }}
       />
     </div>

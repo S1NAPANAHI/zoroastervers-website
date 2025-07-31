@@ -79,7 +79,7 @@ const InteractiveTimelineEvent: React.FC<InteractiveTimelineEventProps> = ({
       resolution: 'from-green-600 to-teal-600',
       future: 'from-indigo-500 to-purple-500'
     };
-    return colors[category] || 'from-gray-500 to-slate-500';
+    return colors[category as keyof typeof colors] || 'from-gray-500 to-slate-500';
   };
 
   return (

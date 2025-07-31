@@ -1,1 +1,1 @@
-﻿export { default as DragDropProvider } from './DragDropProvider';
+export { DragDropProvider, useDragDrop, Draggable, DropZone } from './DragDropProvider';
